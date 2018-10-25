@@ -1,0 +1,18 @@
+<!--<button routerLink="cadastrarLider" class="btn btn-primary">Novo Lider</button><br><br>
+--><br> 
+  <table class="table table-sm ">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Nome</th>
+      <th scope="col">Hierarquia</th>
+      <th scope="col">Ação</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let lider of lider" >
+    <tr>
+      <td><span class="btn btn-link">{{lider.nome}}</span></td>
+      <td>{{lider.hierarquia}}</td>
+      <td><span class="btn btn-link">Inativar</span></td>
+    </tr>
+  </tbody>
+</table>

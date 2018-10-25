@@ -1,0 +1,25 @@
+  <div class="card bg-light">
+    <div class="card-body">
+<div class="form-row">
+    <div class="col">
+  <input type="nome" [(ngModel)]="equipe.nome" class="form-control" id="equipeNome" name="equipeNome" placeholder="Nome">
+  </div>
+  <div class="col">
+  <select  [(ngModel)]="equipe.lider"  name="lider" id="lider"class="form-control">
+    <option *ngFor="let listaLider of listaLider" [ngValue]="listaLider">{{listaLider.nome}}</option>
+  </select>
+  </div>
+  <button class="btn btn-primary" (click)="cadastrarEquipe()">Salvar</button>
+</div>
+</div>
+</div>
+<div  *ngIf="mensagem == 1">
+  <div class="alert alert-success" role="alert">
+      Salvo com sucesso!
+   </div>
+</div>
+<div  *ngIf="mensagem == 2">
+  <div class="alert alert-danger" role="alert">
+      Não cadastrado!
+   </div>
+</div>

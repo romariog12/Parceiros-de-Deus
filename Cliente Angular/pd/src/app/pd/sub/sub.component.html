@@ -1,0 +1,21 @@
+<div class="card bg-light">
+  <div class="card-body">
+<div class="form-row">
+<div class="col">
+<input [(ngModel)]="sub.nome" class="form-control" id="subNome" name="subNome" placeholder="Nome">
+</div>
+<div class="col">
+<select  [(ngModel)]="sub.lider" class="form-control">
+  <option *ngFor="let lider of lider" [ngValue]="lider">{{lider.nome}}</option>
+</select>
+</div>
+<div class="col">
+<select   [(ngModel)]="sub.equipe"  class="form-control ">
+  <option *ngFor="let equipe of equipe" [ngValue]="equipe">{{equipe.nome}}</option>
+</select>
+</div>
+<button class="btn btn-primary" (click)="cadastrarSub()">Salvar</button>
+
+</div>
+</div>
+</div>

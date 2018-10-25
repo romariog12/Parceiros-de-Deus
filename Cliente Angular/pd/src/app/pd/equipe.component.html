@@ -1,0 +1,37 @@
+
+<br> 
+<!--<button routerLink="cadastrarEquipe" class="btn btn-primary">Nova Equipe</button>  <button routerLink="cadastrarSub" class="btn btn-primary">Nova Sub-Equipe</button><br><br>-->
+<div  *ngIf="mensagem == 1">
+    <div class="alert alert-success" role="alert">
+        Salvo com sucesso!
+     </div>
+  </div>
+  <div  *ngIf="mensagem == 2">
+    <div class="alert alert-danger" role="alert">
+        Erro
+     </div>
+  </div>
+  <div  *ngIf="mensagem == 3">
+      <div class="alert alert-danger" role="alert">
+          Erro de inconsistencia! apague ou transfere as subs primeiro!
+       </div>
+    </div>
+<table class="table table-sm">
+<thead>
+  <tr class="thead-dark">
+    <th></th>
+    <th>Nome</th>
+    <th>Líder</th>
+    <th>Ação</th>
+  </tr>
+</thead>
+<tbody *ngFor="let equipe of equipe" >
+  <tr class="" id="equipe-{{equipe.idEquipe}}">
+    <td class="bg-warning"></td>
+    <td><span routerLink="perfil/{{equipe.idEquipe}}"class="btn btn-link">{{equipe.nome}}</span></td>
+    <td><span class="btn btn-link">{{equipe.lider.nome}}<span *ngIf="equipe.lider.conjugue"> e {{equipe.lider.conjugue.nome}}</span></span></td>
+    <td ><button (click)="excluirEquipe(equipe.idEquipe)" class="btn btn-link">Inativar</button></td>
+  </tr>
+</tbody>
+</table> 
+

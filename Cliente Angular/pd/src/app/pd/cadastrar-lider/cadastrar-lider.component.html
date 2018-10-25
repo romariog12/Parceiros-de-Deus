@@ -1,0 +1,30 @@
+<div class="card bg-light">
+  <div class="card-body">
+<div class="form-row">
+  <div class="col">
+    <input type="nome" [(ngModel)]="lider.nome" class="form-control" id="liderNome" name="liderNome" placeholder="Nome">
+</div>
+<div class="col">
+  <select  [(ngModel)]="lider.hierarquia" name="lider" id="lider"class="form-control">
+    <option value="Lider" >Lider</option>
+    <option value="Obreiro" >Obreiro</option>
+    <option value="Diácono" >Diácono</option>
+    <option value="Missionário" >Missionário</option>
+    <option value="Pastor" >Pastor</option>
+    <option value="Bispo" >Bispo</option>
+  </select>
+</div>
+<button class="btn btn-primary" (click)="cadastrarLider()">Salvar</button>
+</div>
+</div>
+</div>
+<div  *ngIf="mensagem == 1">
+  <div class="alert alert-success" role="alert">
+      Salvo com sucesso!
+   </div>
+</div>
+<div  *ngIf="mensagem == 2">
+  <div class="alert alert-danger" role="alert">
+      Não cadastrado!
+   </div>
+</div>

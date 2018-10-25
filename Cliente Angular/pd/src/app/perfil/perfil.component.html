@@ -1,0 +1,40 @@
+<p>
+  {{perfil.equipe.nome}}
+</p>
+<ul class="nav nav-tabs" >
+    <li  class="nav-item  ">
+      <span  class="nav-link btn btn-link" id="perfilSubs" (click)="sub()" >Subs</span>
+    </li>
+    <li  class="nav-item  ">
+      <span class="nav-link btn btn-link" id="perfilAdministracao" (click)="administracao()" >Administração</span>
+    </li>
+</ul>
+<div *ngIf="aba == 'subsAba'">
+<div *ngIf="perfil.equipe.subs == '';else subs" class="alert alert-warning" role="alert">
+    Nenhuma sub cadastrada!
+ </div>
+ <ng-template #subs>
+    <table class="table table-sm">
+        <thead>
+          <tr class="thead-dark">
+            <th></th>
+            <th>Nome</th>
+            <th>Líder</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let subs of perfil.equipe.subs"  >
+          <tr *ngIf="subs.status == 1" id="sub-{{subs.idsub}}">
+            <td class="bg-warning"></td>
+            <td><span class="btn btn-link">{{subs.nome}}</span></td>
+            <td><span class="btn btn-link">{{subs.lider.nome}}<span *ngIf="subs.lider.conjugue"> e {{subs.lider.conjugue.nome}}</span></span></td>
+            <td ><button  class="btn btn-link"(click)="inativarSub(subs.idSub)">Inativar</button></td>
+          </tr>
+        </tbody>
+        </table>
+ </ng-template>
+ </div>
+ <div *ngIf="aba == 'administracaoAba'">
+
+  
+ </div>

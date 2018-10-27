@@ -16,30 +16,43 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.romariodev.module.base.controller.AbstractController;
+import br.com.romariodev.module.base.helper.Mensagem;
 import br.com.romariodev.module.pd.entity.Equipe;
 import br.com.romariodev.module.pd.entity.Lider;
 import br.com.romariodev.module.pd.entity.Pd;
 import br.com.romariodev.module.pd.entity.Sub;
+import br.com.romariodev.module.pd.model.AdministrativoService;
 import br.com.romariodev.module.pd.model.PdService;
 import br.com.romariodev.module.pd.model.Perfil;
+import br.com.romariodev.module.pd.util.Mensagens;
 
 @RestController
 @RequestMapping(path="/pd")
 public class PdController extends AbstractController{
 	@Autowired
 	private PdService pdService;
+	@Autowired
+	private AdministrativoService admService;
 	@PostMapping("/cadastrarlider")
-	public @ResponseBody int cadastratLider(@RequestBody Lider lider) { 
-		return this.pdService.cadastrarlider(lider);
+	public @ResponseBody String cadastratLider(@RequestBody Lider lider) { 
+		if (this.admService.cadastrarlider(lider)== Mensagens.SUCESSO){
+			return "Cadastro realizado com sucesso!";
+		}
+		else if (this.admService.cadastrarlider(lider)== Mensagens.CADASTRO_EXISTENTE){
+			return "Cadastro existente";
+		}
+		else {
+			return "Cadastro não realizado! erro interno! \n Código:["+this.admService.cadastrarlider(lider)+"]";
+		}
 	}
 	@PostMapping(path="/cadastrarEquipe")
 	public @ResponseBody int cadastrarEquipe(@RequestBody Equipe equipe) {
-		return 	this.pdService.cadastrarEquipe(equipe);
+		return 	this.admService.cadastrarEquipe(equipe);
 		
 	}
 	@PostMapping(path="/excluirEquipe")
 	public @ResponseBody int excluirEquipe(@RequestBody int id){
-		return this.pdService.excluirEquipe(id);
+		return this.admService.excluirEquipe(id);
 	}
 	@GetMapping(path="getEquipe/{id}")
 	public @ResponseBody Equipe getEquipe(@PathVariable int id){
@@ -47,25 +60,19 @@ public class PdController extends AbstractController{
 	}
 	@PostMapping(path="/excluirSub")
 	public @ResponseBody int excluirSub(@RequestBody int id){
-		return this.pdService.excluirSub(id);
+		return this.admService.excluirSub(id);
 	}
 	@PostMapping(path="/inativarSub")
 	public @ResponseBody int inativarSub(@RequestBody int id){
-		return this.pdService.inativarSub(id);
+		return this.admService.inativarSub(id);
 	}
 	@PostMapping(path="/ativarSub")
 	public @ResponseBody int ativarSub(@RequestBody int id){
-		return this.pdService.ativarSub(id);
-	}
-	//Lançar Parceiros de Deus
-	@PostMapping(path="/cadastrarPd")
-	public @ResponseBody int cadastrarPd(@RequestBody Pd pd) {
-		pd.setData(Calendar.getInstance());
-		return this.pdService.cadastrarPd(pd);
+		return this.admService.ativarSub(id);
 	}
 	@PostMapping(path="/excluirLancamentoPd")
 	public @ResponseBody int excluirLancamentoPd(@RequestBody int id){
-		return this.pdService.excluirLancamentoPd(id);
+		return this.admService.excluirLancamentoPd(id);
 	}
 	@PostMapping(path="/lancarPd")
 	public @ResponseBody int lancarPd(@RequestBody Pd pd) {
@@ -122,11 +129,11 @@ public class PdController extends AbstractController{
 	}
 	@PostMapping(path="/cadastrarSub")
 	public @ResponseBody int cadastrarSub(@RequestBody Sub sub) {
-		return this.pdService.cadastrarSub(sub);
+		return this.admService.cadastrarSub(sub);
 	}
 	@PostMapping(path="/novoRelatorio")
 	public @ResponseBody int novoRelatorio(@RequestBody int semana){
-		return this.pdService.novoRelatorio(semana);
+		return this.admService.novoRelatorio(semana);
 	}
 	@GetMapping(path="/cicloAtual")
 	public @ResponseBody int cicloAtual(){

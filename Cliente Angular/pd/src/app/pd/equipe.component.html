@@ -16,21 +16,23 @@
           Erro de inconsistencia! apague ou transfere as subs primeiro!
        </div>
     </div>
-<table class="table table-sm">
+<table class="table table-hover table-sm">
 <thead>
   <tr class="thead-dark">
     <th></th>
     <th>Nome</th>
     <th>Líder</th>
     <th>Ação</th>
+    <th></th>
   </tr>
 </thead>
 <tbody *ngFor="let equipe of equipe" >
   <tr class="" id="equipe-{{equipe.idEquipe}}">
     <td class="bg-warning"></td>
     <td><span routerLink="perfil/{{equipe.idEquipe}}"class="btn btn-link">{{equipe.nome}}</span></td>
-    <td><span class="btn btn-link">{{equipe.lider.nome}}<span *ngIf="equipe.lider.conjugue"> e {{equipe.lider.conjugue.nome}}</span></span></td>
-    <td ><button (click)="excluirEquipe(equipe.idEquipe)" class="btn btn-link">Inativar</button></td>
+    <td><span class="btn btn-link">{{equipe.lider.nome}}</span></td>
+    <td ><button (click)="inativarEquipe(equipe.idEquipe)" class="btn btn-link">Inativar</button></td>
+    <td class="bg-warning"></td>
   </tr>
 </tbody>
 </table> 

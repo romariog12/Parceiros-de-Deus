@@ -1,24 +1,30 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center" class="container ">
-  <div class="card"><br>
-  <div class="card-deck d-flex justify-content-center align-items-center container">
-      <div routerLink="equipes" class="card text-white bg-dark mb-4 btn" style="max-width: 18rem;">
-          <div class="card-header">Equipes</div>
-        </div>
-        <div routerLink="lideres" class="card text-white bg-dark mb-4 btn" style="max-width: 18rem;">
-            <div class="card-header warning">Lideres</div>
-          </div>
-          <div routerLink="listaPd" class="card text-white bg-dark mb-4 btn" style="max-width: 18rem;">
-            <div class="card-header warning">Relatórios</div>
-          </div>
-          <div routerLink="administracao" class="card text-white bg-dark mb-4 btn" style="max-width: 18rem;">
-              <div class="card-header">Administração</div>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" routerLink=""><img src="assets/pd1.fw.png"/></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Início <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="equipes">Equipes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="lideres">Lideres</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="listaPd">Relatório</a>
+      </li>
+    </ul>
+    <span class="navbar-text">
+      Parceiros de Deus - Arniqueira
+    </span>
   </div>
-</div>
-
-</div>
-<div style="text-align:center"class="container">
+</nav>
+<div class="container">
   <router-outlet></router-outlet>
 </div>
 

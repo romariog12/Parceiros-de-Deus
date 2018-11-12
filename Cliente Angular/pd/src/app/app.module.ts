@@ -17,7 +17,7 @@ import { RelatorioComponent } from './relatorio/relatorio.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PerfilComponent } from './perfil/perfil.component';
 import {NgxMaskModule} from 'ngx-mask';
-import { AdministracaoComponent } from './administracao/administracao.component'
+import { AdministracaoComponent } from './administracao/administracao.component';
 
 @NgModule({
   declarations: [
@@ -40,9 +40,8 @@ import { AdministracaoComponent } from './administracao/administracao.component'
     FormsModule,
     BrowserAnimationsModule,
     NgxMaskModule.forRoot()
-
   ],
-  providers: [PdService],
+  providers: [PdService, RelatorioComponent],
   bootstrap: [AppComponent, EquipeComponent]
 })
 export class AppModule { }

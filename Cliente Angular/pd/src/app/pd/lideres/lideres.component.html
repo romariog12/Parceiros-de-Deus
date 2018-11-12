@@ -1,6 +1,19 @@
-<!--<button routerLink="cadastrarLider" class="btn btn-primary">Novo Lider</button><br><br>
---><br> 
-  <table class="table table-sm ">
+
+<div class="card bg-light">
+<div  *ngIf="mensagem == 1">
+    <div class="alert alert-success" role="alert">
+        Salvo com sucesso!
+     </div>
+  </div>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link btn {{abaAtiva}}" id="abaLideresAtivos"  (click)="lideresAtivos()">Ativos</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link btn" id="abaLideresInativos" (click)="lideresInativos()">Inativos</a>
+  </li>
+</ul>
+<table class="table table-hover table-sm">
   <thead class="thead-dark">
     <tr>
       <th scope="col">Nome</th>
@@ -8,11 +21,20 @@
       <th scope="col">Ação</th>
     </tr>
   </thead>
-  <tbody *ngFor="let lider of lider" >
-    <tr>
+  <tbody *ngFor="let lider of lider">
+    <tr id="lider-{{lider.idlider}}">
       <td><span class="btn btn-link">{{lider.nome}}</span></td>
       <td>{{lider.hierarquia}}</td>
-      <td><span class="btn btn-link">Inativar</span></td>
+      <td>
+        <span *ngIf="acao == 'ativos'">
+          <button (click)="inativarLider(lider.idlider)" class="btn btn-outline-warning btn-sm ">Inativar</button>
+        </span>
+        <span *ngIf="acao == 'inativos'">
+            <button (click)="ativarLider(lider.idlider)" class="btn btn-outline-success btn-sm ">Ativar</button>
+            <button (click)="excluirLider(lider.idlider)" class="btn btn-outline-danger btn-sm">Excluir</button>
+        </span>
+      </td>
     </tr>
   </tbody>
 </table>
+</div>

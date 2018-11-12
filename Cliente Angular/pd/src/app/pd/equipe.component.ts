@@ -24,8 +24,24 @@ export class EquipeComponent implements OnInit {
                 $("#equipe-"+id).hide(1000)
             }
             });
+    }
+    public inativarEquipe(id: number){
+        this.Service.inativarEquipe(id).subscribe(data =>{this.mensagem = data;
+            if(this.mensagem == 1) {
+                $("#equipe-"+id).hide(1000)
+            }
+            });
         
     }
+    public ativarEquipe(id: number){
+        this.Service.ativarEquipe(id).subscribe(data =>{this.mensagem = data;
+            if(this.mensagem == 1) {
+                $("#equipe-"+id).hide(1000)
+            }
+            });
+        
+    }
+
     public excluirSub(id: number){
         this.Service.excluirSub(id).subscribe($("#sub-"+id).hide(1000));
       }

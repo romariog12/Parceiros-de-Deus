@@ -24,5 +24,8 @@ public interface SubRepository extends CrudRepository<Sub, Long>{
 	void ativarSub(
 			@Param("id") int id
 			);
+	Iterable<Sub> findByStatus(int i);
+	Sub findByLiderIdlider(int id);
+
 
 }

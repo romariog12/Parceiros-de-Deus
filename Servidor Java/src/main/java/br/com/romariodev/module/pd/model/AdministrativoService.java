@@ -2,7 +2,7 @@ package br.com.romariodev.module.pd.model;
 
 import java.util.Calendar;
 import java.util.List;
-
+import org.springframework.stereotype.Service;
 import br.com.romariodev.module.pd.entity.Equipe;
 import br.com.romariodev.module.pd.entity.Lider;
 import br.com.romariodev.module.pd.entity.Pd;
@@ -13,6 +13,7 @@ import br.com.romariodev.module.pd.repository.PdRepository;
 import br.com.romariodev.module.pd.repository.SubRepository;
 import br.com.romariodev.module.pd.util.Mensagens;
 
+@Service
 public class AdministrativoService extends AbstractService {
 
 	AdministrativoService(PdRepository pdRepository,
@@ -20,32 +21,33 @@ public class AdministrativoService extends AbstractService {
 			SubRepository subRepository) {
 		super(pdRepository, equipeRepository, liderRepository, subRepository);
 	}
-	
-	public int novoRelatorio(int semana){
+
+	public int novoRelatorio(int semana, int mes, int ano) {
 		Iterable<Equipe> equipe = this.equipeRepository.findAll();
-		try{
+		Calendar data = Calendar.getInstance();
+		if (semana != 0 && mes != 0 && ano != 0)
+			data.set(ano, mes - 1, Calendar.DAY_OF_MONTH);
+		try {
 			for (Equipe e : equipe) {
 				Pd pd = new Pd();
 				Lider lider = e.getLider();
-				if(lider.getLiderCelula() == 1)
-				{
+				if (lider.getLiderCelula() == 1) {
 					pd.setCelula(0.00f);
 					pd.setIndividual(0.00f);
-					pd.setData(Calendar.getInstance());
+					pd.setData(data);
 					pd.setEquipe(e);
 					pd.setLider(lider);
 					pd.setSemana(semana);
 					this.pdRepository.save(pd);
 				}
-				if(!e.getSubs().isEmpty()){
+				if (!e.getSubs().isEmpty()) {
 					Iterable<Sub> subs = e.getSubs();
-					for (Sub sub : subs)
-					{
+					for (Sub sub : subs) {
 						Pd pdSub = new Pd();
 						Lider liderSub = sub.getLider();
 						pdSub.setCelula(0.00f);
 						pdSub.setIndividual(0.00f);
-						pdSub.setData(Calendar.getInstance());
+						pdSub.setData(data);
 						pdSub.setEquipe(e);
 						pdSub.setLider(liderSub);
 						pdSub.setSemana(semana);
@@ -54,84 +56,170 @@ public class AdministrativoService extends AbstractService {
 				}
 			}
 			return Mensagens.SUCESSO;
-		}catch(Exception e){
+		} catch (Exception e) {
 			return Mensagens.ERRO;
 		}
 	}
-	public int excluirLancamentoPd(int id){
-		try{
+
+	public int excluirLancamentoPd(int id) {
+		try {
 			Pd pd = this.pdRepository.findByIdpd(id);
 			this.pdRepository.delete(pd);
-			return Mensagens.SUCESSO;	
-		}catch(Exception e){
+			return Mensagens.SUCESSO;
+		} catch (Exception e) {
 			return Mensagens.ERRO;
 		}
 	}
+
 	public int cadastrarSub(Sub sub) {
-		try{
+		try {
 			this.subRepository.save(sub);
 			return Mensagens.SUCESSO;
-		}catch(Exception e){
+		} catch (Exception e) {
 			return Mensagens.ERRO;
 		}
 	}
-	public int excluirSub(int id){
-		try{
+
+	public int excluirSub(int id) {
+		try {
 			Sub sub = this.subRepository.findByIdSub(id);
- 	    	List<Pd> pd = this.pdRepository.findByLiderIdlider(sub.getLider().getIdlider());
-			this.pdRepository.deleteAll(pd);
-			this.subRepository.delete(sub);
-			return 	Mensagens.SUCESSO;                    
-		}catch(Exception e){
+			if (!sub.getSubs().isEmpty()) {
+				return Mensagens.ERRO_CONSISTENCIA;
+			} else {
+				List<Pd> pd = this.pdRepository.findByLiderIdlider(sub
+						.getLider().getIdlider());
+				this.pdRepository.deleteAll(pd);
+				this.subRepository.delete(sub);
+				return Mensagens.SUCESSO;
+			}
+		} catch (Exception e) {
 			return Mensagens.ERRO;
 		}
 	}
-	public int inativarSub(int id){
-		try{
-			this.subRepository.inativarSub(id);
-			return 	Mensagens.SUCESSO;                    
-		}catch(Exception e){
+
+	public int inativarSub(int id) {
+		try {
+			Sub sub = this.subRepository.findByIdSub(id);
+			sub.setStatus(-1);
+			this.subRepository.save(sub);
+			return Mensagens.SUCESSO;
+		} catch (Exception e) {
 			return Mensagens.ERRO;
 		}
 	}
-	public int ativarSub(int id){
-		try{
-			this.subRepository.ativarSub(id);
-			return 	Mensagens.SUCESSO;                    
-		}catch(Exception e){
+
+	public int ativarSub(int id) {
+		try {
+			Sub sub = this.subRepository.findByIdSub(id);
+			sub.setStatus(1);
+			this.subRepository.save(sub);
+			return Mensagens.SUCESSO;
+		} catch (Exception e) {
 			return Mensagens.ERRO;
 		}
 	}
+
 	public int cadastrarlider(Lider lider) {
-		try{
+		try {
 			this.liderRepository.save(lider);
 			return Mensagens.SUCESSO;
-		}catch(Exception e){
+		} catch (Exception e) {
 			return Mensagens.ERRO;
 		}
 	}
+
 	public int cadastrarEquipe(Equipe equipe) {
-		try{
+		try {
 			this.equipeRepository.save(equipe);
 			return Mensagens.SUCESSO;
-		}catch(Exception e){
+		} catch (Exception e) {
 			return Mensagens.ERRO;
 		}
 	}
-	public int excluirEquipe(int id){
-		try{
+
+	public int excluirEquipe(int id) {
+		try {
 			Equipe equipe = this.equipeRepository.findByIdEquipe(id);
-			if(!equipe.getSubs().isEmpty()){
+			if (!equipe.getSubs().isEmpty()) {
 				return Mensagens.ERRO_CONSISTENCIA;
-			}
-			else{
+			} else {
 
 				List<Pd> pd = this.pdRepository.findByEquipeIdEquipe(id);
 				this.pdRepository.deleteAll(pd);
 				this.equipeRepository.delete(equipe);
-				return 	Mensagens.SUCESSO;
-			}	
-		}catch(Exception e){
+				return Mensagens.SUCESSO;
+			}
+		} catch (Exception e) {
+			return Mensagens.ERRO;
+		}
+	}
+
+	public int excluirLider(int id) {
+		try {
+			Lider lider = this.liderRepository.findByIdlider(id);
+			Equipe equipe = this.equipeRepository.findByLiderIdlider(id);
+			Sub sub = this.subRepository.findByLiderIdlider(id);
+			if(equipe!=null){
+				return Mensagens.ERRO_CONSISTENCIA;
+			}
+			if(!sub.getSubs().isEmpty()){
+				return Mensagens.ERRO_CONSISTENCIA;
+			}
+			if (lider.getConjugue() != null) {
+				lider.getConjugue().setConjugue(null);
+			}
+			List<Pd> pd = this.pdRepository.findByLiderIdlider(id);
+			this.pdRepository.deleteAll(pd);
+			this.liderRepository.delete(lider);
+			return Mensagens.SUCESSO;
+		} catch (Exception e) {
+			return Mensagens.ERRO;
+		}
+	}
+
+	public int inativarLider(int id) {
+		try {
+			Lider lider = this.liderRepository.findByIdlider(id);
+			lider.setStatus(-1);
+			this.liderRepository.save(lider);
+			return Mensagens.SUCESSO;
+		} catch (Exception e) {
+			return Mensagens.ERRO;
+		}
+
+	}
+
+	public int ativarLider(int id) {
+		try {
+			Lider lider = this.liderRepository.findByIdlider(id);
+			lider.setStatus(1);
+			this.liderRepository.save(lider);
+			return Mensagens.SUCESSO;
+		} catch (Exception e) {
+			return Mensagens.ERRO;
+		}
+
+	}
+
+	public int inativarEquipe(int id) {
+		try {
+			Equipe equipe = this.equipeRepository.findByIdEquipe(id);
+			equipe.setStatus(-1);
+			this.equipeRepository.save(equipe);
+			return Mensagens.SUCESSO;
+		} catch (Exception e) {
+			return Mensagens.ERRO;
+		}
+
+	}
+
+	public int ativarEquipe(int id) {
+		try {
+			Equipe equipe = this.equipeRepository.findByIdEquipe(id);
+			equipe.setStatus(1);
+			this.equipeRepository.save(equipe);
+			return Mensagens.SUCESSO;
+		} catch (Exception e) {
 			return Mensagens.ERRO;
 		}
 	}

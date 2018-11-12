@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router'; 
 import { EquipeComponent } from './pd/equipe.component';
 import { CadastrarEquipeComponent } from './pd/cadastrar-equipe.component';
 import { LideresComponent } from './pd/lideres/lideres.component';
@@ -17,7 +16,7 @@ const routes: Routes = [
   { path: 'lideres', component: LideresComponent },
   { path: 'lideres/cadastrarLider', component: CadastrarLiderComponent },
   { path: 'equipes/lancarPd/:id', component: LancarPdComponent },
-  { path: 'listaPd/lancarPd/:id/:ciclo', component: LancarPdComponent },
+  { path: 'listaPd/lancarPd/:id/:ciclo/:mes/:ano', component: LancarPdComponent },
   { path: 'equipes/cadastrarSub', component: SubComponent },
   { path: 'listaPd', component: RelatorioComponent },
   { path: 'equipes/perfil/:id', component: PerfilComponent },

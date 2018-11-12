@@ -1,38 +1,39 @@
 <div class="card bg-light">
- 
-      <div class="card-header ">
-          <h2>{{equipe.nome}}</h2>
-          <p><span class="badge badge-warning">{{hoje | date: 'dd/MM/yy'}}</span></p>
-        </div>
-        <div  *ngIf="mensagem == 1">
-            <div class="alert alert-success" role="alert">
-                Salvo com sucesso!
-             </div>
-        </div>
-        <div  *ngIf="mensagem == 2">
-            <div class="alert alert-danger" role="alert">
-                Não cadastrado!
-             </div>
-        </div>
-    <div *ngFor="let pd of PD;  let i = index" >
-        <div *ngIf="pd.equipe.idEquipe == equipe.idEquipe">
-          <div class="card-body ">
-          <div class="form-row">
-            <div class="col">
-                <div class="input-group ">
-                    <div class="input-group-prepend col-md-4">
-                            <span class="badge badge-primary">{{i+1}}º </span><span class="input-group-text col-md-12">{{pd.lider.nome}}</span>
-                    </div>
-            <input [dropSpecialCharacters]="false" mask='0*.00' [(ngModel)]="pd.individual" class="form-control"  placeholder="Individual">
-            </div>
-            </div>
-            <div class="col  col-md-4">
-              <input [dropSpecialCharacters]="false" mask='0*.00'  [(ngModel)]="pd.celula" class="form-control"  placeholder="celula">
-              
-            </div>
-                <button class="  btn btn-primary" (click)="cadastrarPd(pd)">Salvar</button>
-          </div>
-          </div>
-      </div>
+    <div class="card-header ">
+            <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a routerLink="/listaPd">Relatórios</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Lançar</li>
+                  </ol>
+        <h2>{{equipe.nome}}</h2>
     </div>
+    <div *ngIf="mensagem == 1">
+        <div class="alert alert-success" role="alert">
+            Salvo com sucesso!
+        </div>
+    </div>
+    <div *ngIf="mensagem == 2">
+        <div class="alert alert-danger" role="alert">
+            Não cadastrado!
+        </div>
+    </div>
+    <table  class="table table-hover">
+        <thead>
+            <tr class="thead-dark">
+              <th ></th>
+              <th>Lider</th>
+              <th>Individual</th>
+              <th>Célula</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let pd of PD;  let i = index">
+              <tr *ngIf="pd.equipe.idEquipe == equipe.idEquipe" >
+                  <td>{{i+1}}º </td>
+                  <td>{{pd.lider.nome}}</td>
+                  <td><input [dropSpecialCharacters]="false" mask='0*.00' [(ngModel)]="pd.individual" class="form-control form-control-sm"placeholder="Individual"></td>
+                  <td><input [dropSpecialCharacters]="false" mask='0*.00' [(ngModel)]="pd.celula" class="form-control form-control-sm" placeholder="celula"></td>
+                  <td><button class=" btn-sm  btn btn-primary" (click)="cadastrarPd(pd)">Salvar</button></td>
+               </tr>
+          </tbody>
+    </table>
 </div>

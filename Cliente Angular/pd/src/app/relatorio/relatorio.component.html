@@ -1,150 +1,245 @@
-
-<br><div class="form-row">  
-<div class="badge badge-sm badge-danger">
-  Mês <br><h4 class="alert-link">{{data | date:'MM'}}</h4>Ciclo: {{ciclo}}
-</div>
-<ul class="nav nav-tabs" >
-    <li  class="nav-item  ">
-      <a class="nav-link btn  " id="1" (click)="pdCiclo(1)">Ciclo 1</a>
-      <button *ngIf="ciclo == 1"class="btn btn-block btn-sm btn-link" (click)="pdCompletoPorCiclo(ciclo)">Completo</button>
-    </li>
-    <li  class="nav-item  ">
-      <a class="nav-link btn" id="2" (click)="pdCiclo(2)">Ciclo 2</a>
-      <button *ngIf="ciclo == 2"class="btn btn-block btn-sm btn-link" (click)="pdCompletoPorCiclo(ciclo)">Completo</button>
-    </li>
-    <li  class="nav-item">
-      <a class="nav-link btn  " id="3" (click)="pdCiclo(3)">Ciclo 3</a>
-      <button *ngIf="ciclo == 3"class="btn btn-block btn-sm btn-link" (click)="pdCompletoPorCiclo(ciclo)">Completo</button>
-    </li>
-    <li  class="nav-item ">
-        <a class="nav-link btn " id="4" (click)="pdCiclo(4)">Ciclo 4</a>
-        <button *ngIf="ciclo == 4"class="btn btn-block btn-sm btn-link" (click)="pdCompletoPorCiclo(ciclo)">Completo</button>
-    </li>
-    <li  class="nav-item ">
-        <a class="nav-link btn " id="5" (click)="pdCiclo(5)">Ciclo 5</a>
-        <button *ngIf="ciclo == 5"class="btn btn-block btn-sm btn-link" (click)="pdCompletoPorCiclo(ciclo)">Completo</button>
-    </li>
-    <li  class="nav-item ">
-        <a class="nav-link btn btn-sm" (click)="pdMes()" id="mesInteiro" >Ranking Mensal Célula</a>
-    </li>
-    <li  class="nav-item ">
-        <a class="nav-link btn btn-sm " (click)="pdMesEquipe()" id="mesEquipe" >Ranking Mensal Equipe</a>
-    </li>
-    <li  class="nav-item ">
-        <a class="nav-link btn btn-sm " (click)="pdIndividualPorMes()" id="mesIndividual" >Individual</a>
+<div class="card bg-light">
+  <div>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Relatórios</li>
+    </ol>
+    <ul class="nav nav-tabs">
+      <div *ngIf="filtroMes == 0; else filtro" class="badge badge-sm badge-danger">
+        Mês <br>
+        <h4 class="alert-link">{{data | date:'MM'}}</h4>Ciclo: {{ciclo}}
+      </div>
+      <ng-template #filtro>
+        <div class="badge badge-sm badge-danger">
+          Mês <br>
+          <h4 class="alert-link">{{filtroMes}}</h4>Ciclo: {{ciclo}}
+        </div>
+      </ng-template>
+      <li class="nav-item  ">
+        <a class="nav-link btn  " id="1" (click)="pdCiclo(1)">Ciclo 1</a>
+        <button *ngIf="ciclo == 1" class="btn btn-block btn-sm btn-link" (click)="pdCompletoPorCiclo(ciclo)">Completo</button>
       </li>
-  </ul>
-  
-    <table id="table" class="table  table-sm" *ngIf="relatorio == false">
-        <thead>
-          <tr class="thead-dark">
-            <th ></th>
-            <th>Equipe</th>
-            <th>Lider</th>
-            <th>Individual</th>
-            <th class="out">Célula</th>
-            <th class="out">Total</th>
-            <th>Lançar</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let pd of pd; let i = index"   >
-            <tr *ngIf="pd.individual + pd.celula == 0" class="alert alert-danger"id="pd-{{pd.idPd}}">
-                <td style="background-color: rgb(241, 52, 52); width: 5px"><b>{{i+1}}º</b></td>
-                <td>{{pd.equipe.nome}}</td> 
-                <td *ngIf="completo">{{pd.lider.nome}}  </td>
-                <td *ngIf="!completo">{{pd.equipe.lider.nome}}</td>
-                <td class="{{individualSuccess}}">R$ {{pd.individual | number}}</td>
-                <td  (click)="excluirLancamentoPd(pd.idpd)">R$ {{pd.celula  | number}}</td>
-                <td >R$ {{pd.individual + pd.celula | number}}</td>
-               <td><button class="btn btn-sm btn-outline-danger"><img routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}" src="../../assets/lancar.png"/></button></td>
-              </tr>
-          <tr *ngIf="pd.individual + pd.celula >= 10" class="alert alert-success"id="pd-{{pd.idPd}}">
-            <td style="background-color: rgb(84, 240, 84); width: 5px"><b>{{i+1}}º</b></td>
-            <td>{{pd.equipe.nome}}</td>
-            <td *ngIf="completo">{{pd.lider.nome}}  </td>
-            <td *ngIf="!completo">{{pd.equipe.lider.nome}}</td>
-            <td class="{{individualSuccess}}">R$ {{pd.individual | number}}</td>
-            <td  (click)="excluirLancamentoPd(pd.idpd)">R$ {{pd.celula  | number}}</td>
-            <td >R$ {{pd.individual + pd.celula | number}}</td>
-            <td class="lancar"><button class="btn btn-sm btn-outline-success"><img routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}" src="../../assets/lancar.png"/></button></td>
-          </tr>
-              <tr *ngIf="(pd.celula + pd.individual > 0) && (pd.celula + pd.individual < 10)" class="alert alert-warning"  id="pd-{{pd.idPd}}">
-                  <td style="background-color: rgb(255, 245, 111);  width: 5px"><b>{{i+1}}º</b></td>
-                  <td>{{pd.equipe.nome}}</td>
-                  <td *ngIf="completo">{{pd.lider.nome}}  </td>
-                   <td *ngIf="!completo">{{pd.equipe.lider.nome}}</td>
-                    <td class="{{individualWarning}}">R$ {{pd.individual | number}}</td>
-                  <td>R$ {{pd.celula  | number}}</td>
-                  <td (click)="excluirLancamentoPd(pd.idpd)">R$ {{pd.individual + pd.celula | number}}</td>
-                  <td><button class="btn btn-sm btn-outline-warning"><img routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}" src="../../assets/lancar.png"/></button></td>
-                </tr>
-          
-        </tbody>
-        <tr  class="thead-dark">
-          <th colspan="2">Total</th>
-          <th></th>
-          <th>{{totalIndividual | number}}</th>
-          <th>{{totalCelula | number}}</th>
-          <th>{{totalIndividual + totalCelula | number}}</th>
-          <th></th>
-        </tr>
-        </table> 
+      <li class="nav-item  ">
+        <a class="nav-link btn" id="2" (click)="pdCiclo(2)">Ciclo 2</a>
+        <button *ngIf="ciclo == 2" class="btn btn-block btn-sm btn-link" (click)="pdCompletoPorCiclo(ciclo)">Completo</button>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn  " id="3" (click)="pdCiclo(3)">Ciclo 3</a>
+        <button *ngIf="ciclo == 3" class="btn btn-block btn-sm btn-link" (click)="pdCompletoPorCiclo(ciclo)">Completo</button>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link btn " id="4" (click)="pdCiclo(4)">Ciclo 4</a>
+        <button *ngIf="ciclo == 4" class="btn btn-block btn-sm btn-link" (click)="pdCompletoPorCiclo(ciclo)">Completo</button>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link btn " id="5" (click)="pdCiclo(5)">Ciclo 5</a>
+        <button *ngIf="ciclo == 5" class="btn btn-block btn-sm btn-link" (click)="pdCompletoPorCiclo(ciclo)">Completo</button>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link btn btn-sm" (click)="pdMes()" id="mesInteiro">Ranking Mensal Líder</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link btn btn-sm " (click)="pdMesEquipe()" id="mesEquipe">Ranking Mensal Equipe</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link btn btn-sm " (click)="pdIndividualPorMes()" id="mesIndividual">Individual</a>
+      </li>
+      <li>
+        <div class="input-group">
+          <select [(ngModel)]="filtroMes" class="form-control form-control-sm col-sm-5">
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            <option value="05">05</option>
+            <option value="06">06</option>
+            <option value="07">07</option>
+            <option value="08">08</option>
+            <option value="09">09</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+          <select [(ngModel)]="filtroAno" class="form-control form-control-sm  ">
+            <option value="{{data | date:'yyyy'}}">{{data | date:'yyyy'}}</option>
+            <option value="2017">2017</option>
+          </select>
+          <button (click)="filtrar()" class="btn btn-outline-dark btn-sm">Filtrar</button>
+        </div>
+      </li>
+    </ul>
 
-  <table id="table" class="table table-sm" *ngIf="relatorio">
-        <thead>
-          <tr class="thead-dark">
-            <th></th>
-            <th>Equipe</th>
-            <th>Lider</th>
-            <th>Individual</th>
-            <th class="out">Célula</th>
-            <th class="out">Total</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let pd of pd; let i = index"  >
-            <tr *ngIf="pd.individual + pd.celula == 0" class="alert alert-danger"id="pd-{{pd.idPd}}">
-                <td style="background-color: rgb(241, 52, 52); width: 5px"><b>{{i+1}}º</b></td>
-                <td>{{pd.equipe.nome}}</td>
-                <td *ngIf="completo">{{pd.lider.nome}} </td>
-                <td *ngIf="!completo">{{pd.equipe.lider.nome}}</td>
-                <td class="{{individualSuccess}}">R$ {{pd.individual | number}}</td>
-                <td  (click)="excluirLancamentoPd(pd.idpd)">R$ {{pd.celula  | number}}</td>
-                <td >R$ {{pd.individual + pd.celula | number}}</td>
-              </tr>
-          <tr *ngIf="pd.individual + pd.celula >= 70" class="alert alert-success"id="pd-{{pd.idPd}}">
-            <td style="background-color: rgb(84, 240, 84); width: 5px"><b>{{i+1}}º</b></td>
-            <td>{{pd.equipe.nome}}</td>
-            <td *ngIf="completo">{{pd.lider.nome}} </td>
-            <td *ngIf="!completo">{{pd.equipe.lider.nome}}</td>
-            <td class="{{individualSuccess}}">R$ {{pd.individual | number}}</td>
-            <td  (click)="excluirLancamentoPd(pd.idpd)">R$ {{pd.celula  | number}}</td>
-            <td >R$ {{pd.individual + pd.celula | number}}</td>
-          </tr>
-              <tr *ngIf="((pd.individual + pd.celula> 0) && (pd.individual + pd.celula < 70))" class="alert alert-warning"  id="pd-{{pd.idPd}}">
-                  <td style="background-color: rgb(255, 245, 111);  width: 5px"><b>{{i+1}}º</b></td>
-                  <td>{{pd.equipe.nome}}</td>
-                  <td *ngIf="completo">{{pd.lider.nome}} </td>
-                  <td *ngIf="!completo">{{pd.equipe.lider.nome}}</td>
-                  <td class="{{individualWarning}}">R$ {{pd.individual | number}}</td>
-                  <td>R$ {{pd.celula  | number}}</td>
-                  <td (click)="excluirLancamentoPd(pd.idpd)">R$ {{pd.individual + pd.celula | number}}</td>
-              </tr>          
-        </tbody>
-        <tr  class="thead-dark">
-          <th colspan="2">Total</th>
+    <table id="table" class="table table-hover table-sm" *ngIf="relatorio == false">
+      <thead>
+        <tr class="thead-dark">
           <th></th>
-          <th>{{totalIndividual | number}}</th>
-          <th>{{totalCelula | number}}</th>
-          <th>{{totalIndividual + totalCelula | number}}</th>
+          <th>Equipe</th>
+          <th>Lider</th>
+          <th>Individual</th>
+          <th class="out">Célula</th>
+          <th class="out">Total</th>
+          <th style="display: none;">Lançar</th>
         </tr>
-        </table>
+      </thead>
+      <tbody *ngFor="let pd of pd; let i = index">
+        <tr *ngIf="pd.individual + pd.celula == 0" class="alert alert-danger" id="pd-{{pd.idPd}}" routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{filtroMes}}/{{filtroAno}}">
+          <td style="background-color: rgb(241, 52, 52); width: 5px"><b>{{i+1}}º</b></td>
+          <td>{{pd.equipe.nome}}</td>
+          <td *ngIf="completo">{{pd.lider.nome}} <span *ngIf="pd.lider.conjugue"> e {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td *ngIf="!completo">{{pd.equipe.lider.nome}}<span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td class="{{individualSuccess}}">R$ {{pd.individual | number}}</td>
+          <td>R$ {{pd.celula | number}}</td>
+          <td class="alert-link">R$ {{pd.individual + pd.celula | number}}</td>
+          <td style="display: none;"><button class="btn btn-sm btn-outline-danger"><img routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{mes}}/{{ano}}"
+                src="../../assets/lancar1.png" /></button></td>
+        </tr>
+        <tr *ngIf="pd.individual + pd.celula >= 10" class="alert alert-success" id="pd-{{pd.idPd}}" routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{filtroMes}}/{{filtroAno}}">
+          <td style="background-color: rgb(179, 240, 179); width: 5px"><b><span *ngIf="i+1 == 1"><img src="../../assets/pri.png" /></span><span
+                *ngIf="i+1 != 1">{{i+1}}º</span></b></td>
+          <td>{{pd.equipe.nome}}</td>
+          <td *ngIf="completo">{{pd.lider.nome}} <span *ngIf="pd.lider.conjugue"> e {{pd.lider.conjugue.nome}}</span></td>
+          <td *ngIf="!completo">{{pd.equipe.lider.nome}}<span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td class="{{individualSuccess}}">R$ {{pd.individual | number}}</td>
+          <td>R$ {{pd.celula | number}}</td>
+          <td class="alert-link">R$ {{pd.individual + pd.celula | number}}</td>
+          <td style="display: none;" class="lancar"><button class="btn btn-sm btn-outline-success"><img routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{mes}}/{{ano}}"
+                src="../../assets/lancar1.png" /></button></td>
+        </tr>
+        <tr *ngIf="(pd.celula + pd.individual > 0) && (pd.celula + pd.individual < 10)" class="alert alert-warning" id="pd-{{pd.idPd}}"
+          routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{filtroMes}}/{{filtroAno}}">
+          <td style="background-color: rgb(255, 245, 111);  width: 5px"><b>{{i+1}}º</b></td>
+          <td>{{pd.equipe.nome}}</td>
+          <td *ngIf="completo">{{pd.lider.nome}} <span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td *ngIf="!completo">{{pd.equipe.lider.nome}}<span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td class="{{individualWarning}}">R$ {{pd.individual | number}}</td>
+          <td>R$ {{pd.celula | number}}</td>
+          <td class="alert-link">R$ {{pd.individual + pd.celula | number}}</td>
+          <td style="display: none;"><button class="btn btn-sm btn-outline-warning"><img routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{mes}}/{{ano}}"
+                src="../../assets/lancar1.png" /></button></td>
+        </tr>
 
-        <div *ngIf="pd == '' && ciclo <= semana">
-            <div >
-                <button (click)="novoRelatorio(ciclo)" class="btn btn-success" >Novo Relatório *</button>
-            </div>  
-          </div>
-          <div *ngIf="pd == '' && ciclo > semana" class="mx-auto" style="width: 200px;">
-              <img routerLink="lancarPd/{{pd.equipe.idEquipe}}" src="../../assets/anigif.gif"/>   
-            </div>
+      </tbody>
+      <tr class="thead-dark">
+        <th colspan="2">Total</th>
+        <th></th>
+        <th>R$ {{totalIndividual | number}}</th>
+        <th>R$ {{totalCelula | number}}</th>
+        <th>R$ {{totalIndividual + totalCelula | number}}</th>
+        <th style="display: none;"></th>
+      </tr>
+    </table>
+
+    <table id="table" class="table table-sm table-hover" *ngIf="relatorio   && individual == false">
+      <thead>
+        <tr class="thead-dark">
+          <th></th>
+          <th>Equipe</th>
+          <th>Lider</th>
+          <th>Individual</th>
+          <th class="out">Célula</th>
+          <th class="out">Total</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let pd of pd; let i = index">
+        <tr *ngIf="pd.individual + pd.celula == 0" class="alert alert-danger" id="pd-{{pd.idPd}}">
+          <td style="background-color: rgb(241, 52, 52); width: 5px"><b>{{i+1}}º</b></td>
+          <td>{{pd.equipe.nome}}</td>
+          <td *ngIf="completo">{{pd.lider.nome}} <span *ngIf="pd.lider.conjugue"> e {{pd.lider.conjugue.nome}}</span></td>
+          <td *ngIf="!completo">{{pd.equipe.lider.nome}}<span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td class="{{individualSuccess}}">R$ <span class="badge-pill">{{pd.individual | number}}</span></td>
+          <td>R$ <span class="badge-pill">{{pd.celula | number}}</span></td>
+          <td class="alert-link">R$ <span class="badge-pill">{{pd.individual + pd.celula | number}}</span></td>
+        </tr>
+        <tr *ngIf="pd.individual + pd.celula >= 70" class="alert alert-success" id="pd-{{pd.idPd}}">
+          <td style="background-color: rgb(179, 240, 179); width: 5px"><b><span *ngIf="i+1 == 1"><img src="../../assets/pri.png" /></span><span
+                *ngIf="i+1 != 1">{{i+1}}º</span></b></td>
+          <td>{{pd.equipe.nome}}</td>
+          <td *ngIf="completo">{{pd.lider.nome}}<span *ngIf="pd.lider.conjugue"> e {{pd.lider.conjugue.nome}}</span>
+          </td>
+          <td *ngIf="!completo">{{pd.equipe.lider.nome}}<span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td class="{{individualSuccess}}">R$ <span class="badge-pill">{{pd.individual | number}}</span></td>
+          <td>R$ <span class="badge-pill">{{pd.celula | number}}</span></td>
+          <td class="alert-link">R$ <span class="badge-pill">{{pd.individual + pd.celula | number}}</span></td>
+        </tr>
+        <tr *ngIf="((pd.individual + pd.celula> 0) && (pd.individual + pd.celula < 70))" class="alert alert-warning" id="pd-{{pd.idPd}}">
+          <td style="background-color: rgb(255, 245, 111);  width: 5px"><b>{{i+1}}º</b></td>
+          <td>{{pd.equipe.nome}}</td>
+          <td *ngIf="completo">{{pd.lider.nome}} <span *ngIf="pd.lider.conjugue"> e {{pd.lider.conjugue.nome}}</span></td>
+          <td *ngIf="!completo">{{pd.equipe.lider.nome}} <span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td class="{{individualWarning}}">R$ <span class="badge-pill">{{pd.individual | number}}</span></td>
+          <td>R$ <span class="badge-pill">{{pd.celula | number}}</span></td>
+          <td class="alert-link">R$ <span class="badge-pill">{{pd.individual + pd.celula | number}}</span></td>
+        </tr>
+      </tbody>
+      <tr class="thead-dark">
+        <th colspan="2">Total</th>
+        <th></th>
+        <th>R$ {{totalIndividual | number}}</th>
+        <th>R$ {{totalCelula | number}}</th>
+        <th>R$ {{totalIndividual + totalCelula | number}}</th>
+      </tr>
+    </table>
+
+    <table id="table " class="table table-sm  table-hover" *ngIf="relatorio   && individual">
+      <thead>
+        <tr class="thead-dark ">
+          <th></th>
+          <th>Equipe</th>
+          <th>Lider</th>
+          <th>Individual</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let pd of pd; let i = index">
+        <tr *ngIf="pd.individual  == 0" class="alert alert-danger" id="pd-{{pd.idPd}}">
+          <td style="background-color: rgb(241, 52, 52); width: 5px;text-align:center"><b>{{i+1}}º</b></td>
+          <td>{{pd.equipe.nome}}</td>
+          <td *ngIf="completo">{{pd.lider.nome}} <span *ngIf="pd.lider.conjugue"> e {{pd.lider.conjugue.nome}}</span></td>
+          <td *ngIf="!completo">{{pd.equipe.lider.nome}}<span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td class="alert-link">R$<span class="badge-pill"> {{pd.individual | number}}</span></td>
+        </tr>
+        <tr *ngIf="pd.individual  >= 30" class="alert alert-success" id="pd-{{pd.idPd}}">
+          <td style="background-color: rgb(179, 240, 179); width: 5px"><b><span *ngIf="i+1 == 1"><img src="../../assets/pri.png" /></span><span
+                *ngIf="i+1 != 1">{{i+1}}º</span></b></td>
+          <td>{{pd.equipe.nome}}</td>
+          <td *ngIf="completo">{{pd.lider.nome}}<span *ngIf="pd.lider.conjugue"> e {{pd.lider.conjugue.nome}}</span>
+          </td>
+          <td *ngIf="!completo">{{pd.equipe.lider.nome}}<span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td class="alert-link">R$<span class="badge-pill"> {{pd.individual | number}}</span></td>
+        </tr>
+        <tr *ngIf="((pd.individual > 0) && (pd.individual < 30))" class="alert alert-warning" id="pd-{{pd.idPd}}">
+          <td style="background-color: rgb(255, 245, 111);  width: 5px"><b>{{i+1}}º</b></td>
+          <td>{{pd.equipe.nome}}</td>
+          <td *ngIf="completo">{{pd.lider.nome}} <span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td *ngIf="!completo">{{pd.equipe.lider.nome}}<span *ngIf="pd.equipe.lider.conjugue"> e
+              {{pd.equipe.lider.conjugue.nome}}</span></td>
+          <td class="alert-link">R$<span class="badge-pill"> {{pd.individual | number}}</span></td>
+        </tr>
+      </tbody>
+      <tr class="thead-dark">
+        <th colspan="2">Total</th>
+        <th></th>
+        <th>{{totalIndividual | number}}</th>
+
+      </tr>
+    </table>
+
+    <div *ngIf="pd == '' && ciclo <= semana">
+      <div>
+        <button (click)="novoRelatorio(ciclo)" class="btn btn-success">Novo Relatório *</button>
+      </div>
+    </div>
+    <div *ngIf="ciclo > semana" class="mx-auto" style="width: 200px;">
+      <img routerLink="lancarPd/{{pd.equipe.idEquipe}}" src="../../assets/anigif.gif" />
+    </div>
+
+  </div>
 </div>

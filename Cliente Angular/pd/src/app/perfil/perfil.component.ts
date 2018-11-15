@@ -12,7 +12,8 @@ import * as $ from 'jquery';
 export class PerfilComponent implements OnInit {
  public perfil : Perfil
  public mensagem;
- public aba: string = "subsAba"
+ public aba: string = "subsAba";
+ public ativo = "active"
   constructor(private service:PdService,private route: ActivatedRoute) { }
 
   ngOnInit() {

@@ -1,8 +1,30 @@
 <div class="card bg-light">
   <div>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">Relatórios</li>
-    </ol>
+    <div class="d-flex flex-row-reverse">
+        <div class="input-group">
+            <select [(ngModel)]="filtroMes" class="form-control form-control-sm col-sm-5">
+              <option value="01">01</option>
+              <option value="02">02</option>
+              <option value="03">03</option>
+              <option value="04">04</option>
+              <option value="05">05</option>
+              <option value="06">06</option>
+              <option value="07">07</option>
+              <option value="08">08</option>
+              <option value="09">09</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+            <select [(ngModel)]="filtroAno" class="form-control form-control-sm  ">
+              <option value="{{data | date:'yyyy'}}">{{data | date:'yyyy'}}</option>
+              <option value="2017">2017</option>
+            </select>
+            <button (click)="filtrar()" class="btn btn-outline-dark btn-sm">Filtrar</button>
+          </div>
+    </div>
+   </ol> 
     <ul class="nav nav-tabs">
       <div *ngIf="filtroMes == 0; else filtro" class="badge badge-sm badge-danger">
         Mês <br>
@@ -42,29 +64,6 @@
       </li>
       <li class="nav-item ">
         <a class="nav-link btn btn-sm " (click)="pdIndividualPorMes()" id="mesIndividual">Individual</a>
-      </li>
-      <li>
-        <div class="input-group">
-          <select [(ngModel)]="filtroMes" class="form-control form-control-sm col-sm-5">
-            <option value="01">01</option>
-            <option value="02">02</option>
-            <option value="03">03</option>
-            <option value="04">04</option>
-            <option value="05">05</option>
-            <option value="06">06</option>
-            <option value="07">07</option>
-            <option value="08">08</option>
-            <option value="09">09</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-          </select>
-          <select [(ngModel)]="filtroAno" class="form-control form-control-sm  ">
-            <option value="{{data | date:'yyyy'}}">{{data | date:'yyyy'}}</option>
-            <option value="2017">2017</option>
-          </select>
-          <button (click)="filtrar()" class="btn btn-outline-dark btn-sm">Filtrar</button>
-        </div>
       </li>
     </ul>
 
@@ -242,4 +241,5 @@
     </div>
 
   </div>
+ 
 </div>

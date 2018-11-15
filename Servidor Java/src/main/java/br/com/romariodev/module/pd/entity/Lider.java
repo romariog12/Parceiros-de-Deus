@@ -18,7 +18,7 @@ public class Lider implements Serializable {
 	private String nome;
 	private String hierarquia;
 	private int liderCelula =  1;
-	private int status;
+	private int status = 1;
 	public int getStatus() {
 		return status;
 	}

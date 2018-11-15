@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,22 +45,32 @@ public class AbstractService {
 	}
 
 
+	public Iterable<Equipe> equipes(Pageable p) {
+
+		return this.equipeRepository.findByStatus(1, p);
+	}
 	public Iterable<Equipe> equipes() {
 
 		return this.equipeRepository.findByStatus(1);
 	}
 
-	public Iterable<Equipe> equipesInativas() {
+	public Iterable<Equipe> equipesInativas(Pageable p) {
 
-		return this.equipeRepository.findByStatus(-1);
+		return this.equipeRepository.findByStatus(-1, p);
 	}
 
+	public Page<Lider> lideres(Pageable p) {
+		return this.liderRepository.findByStatus(1, p);
+	}
 	public Iterable<Lider> lideres() {
 		return this.liderRepository.findByStatus(1);
 	}
+	public Lider lider(int id) {
+		return this.liderRepository.findByIdlider(id);
+	}
 
-	public Iterable<Lider> lideresInativos() {
-		return this.liderRepository.findByStatus(-1);
+	public Page<Lider> lideresInativos(Pageable p) {
+		return this.liderRepository.findByStatus(-1, p);
 	}
 
 	public List<Pd> listaPd(Iterable<Pd> pd) {
@@ -77,7 +89,7 @@ public class AbstractService {
 		return listaPd;
 	}
 
-	public Equipe getEquipe(int id) {
+	public Equipe equipe(int id) {
 		return this.equipeRepository.findByIdEquipe(id);
 	}
 

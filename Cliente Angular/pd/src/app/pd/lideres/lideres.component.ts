@@ -10,24 +10,77 @@ import * as $ from 'jquery';
 })
 export class LideresComponent implements OnInit {
   private mensagem;
-  public abaAtiva = "active"
-  public acao = "ativos"
+  public abaAtiva = "active";
+  public acao = "ativos";
+  public paginacaoLideres = [];
+  public totalPagina;
+  public numeroPagina;
+  public paginacao = [];
+  public  totalElementos;
+  public anterior: number = 88888;
+  public proximo: number = 99999;
   constructor(private service: PdService) { }
   lider: Lider[];
   ngOnInit() {
-    this.lideresAtivos()
+    if (this.acao == "inativos")
+      this.lideresInativos(0)
+    else
+      this.lideresAtivos(0)
   }
-  public lideresInativos(){
+  public lideresInativos(page: number) {
     this.acao = "inativos"
+    this.anterior = 88888
+    this.proximo = 99999
     $("#abaLideresAtivos").removeClass(this.abaAtiva)
     $("#abaLideresInativos").addClass(this.abaAtiva)
-    this.service.lideresInativos().subscribe(data => { this.lider = data });
+    this.service.lideresInativos(page).subscribe(data => {
+      this.paginacaoLideres = data,
+        this.lider = this.paginacaoLideres['content'],
+        this.totalPagina = this.paginacaoLideres['totalPages'],
+        this.numeroPagina = this.paginacaoLideres['number'];
+        this.totalElementos = this.paginacaoLideres['totalElements']
+      let p = []
+      for (let index = 0; index < this.totalPagina; index++) {
+        p[index] = index
+        this.paginacao = p;
+      }
+      if (this.numeroPagina == 0) {
+        this.anterior = this.numeroPagina
+      }
+      if (this.numeroPagina + 1 == this.totalPagina) {
+        this.proximo = this.numeroPagina
+      }
+      $(".page-item").removeClass("active")
+      $("#page-" + this.numeroPagina).addClass("active")
+    });
+
   }
-  public lideresAtivos(){
+  public lideresAtivos(page: number) {
+    this.anterior = 88888
+    this.proximo = 99999
     this.acao = "ativos"
     $("#abaLideresAtivos").addClass(this.abaAtiva)
     $("#abaLideresInativos").removeClass(this.abaAtiva)
-    this.service.listaLider().subscribe(data => { this.lider = data });
+    this.service.listaLider(page).subscribe(data => {
+      this.paginacaoLideres = data
+        this.lider = this.paginacaoLideres['content']
+        this.totalPagina = this.paginacaoLideres['totalPages']
+        this.numeroPagina = this.paginacaoLideres['number']
+        this.totalElementos = this.paginacaoLideres['totalElements']
+      let p = []
+      for (let index = 0; index < this.totalPagina; index++) {
+        p[index] = index
+        this.paginacao = p;
+      };
+      if (this.numeroPagina == 0) {
+        this.anterior = this.numeroPagina
+      }
+      if (this.numeroPagina + 1 == this.totalPagina) {
+        this.proximo = this.numeroPagina
+      }
+      $(".page-item").removeClass("active")
+      $("#page-" + this.numeroPagina).addClass("active")
+    });
   }
   public inativarLider(id: number) {
     return this.service.inativarLider(id).subscribe(
@@ -51,6 +104,8 @@ export class LideresComponent implements OnInit {
     return this.service.excluirLider(id).subscribe(
       data => {
         this.mensagem = data;
+        console.log(this.mensagem);
+
         if (this.mensagem == 1) {
           $("#lider-" + id).hide(1000)
         }

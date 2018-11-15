@@ -16,8 +16,8 @@ export class SubComponent implements OnInit {
   public equipe: Equipe[];
   public lider: Lider[];
   ngOnInit() {
-    this.service.listaEquipe().subscribe(data =>{this.equipe = data});
-    this.service.listaLider().subscribe(data=> {this.lider = data})
+    this.service.equipes().subscribe(data =>{this.equipe = data});
+    this.service.lideres().subscribe(data=> {this.lider = data})
   }
   public cadastrarSub(){
     this.service.cadastrarSub(this.sub).subscribe(data =>{console.log()});

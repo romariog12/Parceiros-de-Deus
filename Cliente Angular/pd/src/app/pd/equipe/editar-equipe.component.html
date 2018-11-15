@@ -10,10 +10,11 @@
   </div>
   <div class="col">
   <select  [(ngModel)]="equipe.lider"  name="lider" id="lider"class="form-control">
-    <option *ngFor="let listaLider of lideres" [ngValue]="listaLider">{{listaLider.nome}}</option>
+      <option  [ngValue]="equipe.lider" selected>{{equipe.lider.nome}}</option>
+    <option *ngFor="let listaLider of lideres" [ngValue]="listaLider" >{{listaLider.nome}}</option>
   </select>
   </div>
-  <button class="btn btn-primary" (click)="cadastrarEquipe()">Salvar</button>
+  <button class="btn btn-primary" (click)="editarEquipe()">Salvar</button>
 </div>
 </div>
 </div>

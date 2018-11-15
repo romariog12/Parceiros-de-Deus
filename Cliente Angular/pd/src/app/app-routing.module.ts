@@ -9,6 +9,8 @@ import { SubComponent } from './pd/sub/sub.component';
 import { RelatorioComponent } from './relatorio/relatorio.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { AdministracaoComponent } from './administracao/administracao.component';
+import { editarLider } from './pd/lideres/editarLider.component';
+import { EditarEquipeComponent } from './pd/equipe/editar-equipe.component';
 
 const routes: Routes = [
   { path: 'equipes', component: EquipeComponent },
@@ -20,7 +22,9 @@ const routes: Routes = [
   { path: 'equipes/cadastrarSub', component: SubComponent },
   { path: 'listaPd', component: RelatorioComponent },
   { path: 'equipes/perfil/:id', component: PerfilComponent },
-  { path: 'administracao', component: AdministracaoComponent }
+  { path: 'administracao', component: AdministracaoComponent },
+  { path: 'editarLider/:id', component: editarLider },
+  { path: 'editarEquipe/:id', component: EditarEquipeComponent }
 
 ];
 @NgModule({

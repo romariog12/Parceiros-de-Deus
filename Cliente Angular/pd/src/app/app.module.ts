@@ -18,14 +18,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PerfilComponent } from './perfil/perfil.component';
 import {NgxMaskModule} from 'ngx-mask';
 import { AdministracaoComponent } from './administracao/administracao.component';
+import { editarLider } from './pd/lideres/editarLider.component';
+import { EditarEquipeComponent } from './pd/equipe/editar-equipe.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PdComponent,
     EquipeComponent,
+    EditarEquipeComponent,
     CadastrarEquipeComponent,
     CadastrarLiderComponent,
+    editarLider,
     LideresComponent,
     LancarPdComponent,
     SubComponent,

@@ -27,7 +27,7 @@ export class LancarPdComponent implements OnInit {
   constructor(private service: PdService, private route: ActivatedRoute, private router:Router, private relatorio: RelatorioComponent) { }
 
   ngOnInit() {
-    this.service.listaLider().subscribe(data=>{this.lideres = data})
+    this.service.listaLider(0).subscribe(data=>{this.lideres = data})
     const id = +this.route.snapshot.paramMap.get('id')
     const ciclo = +this.route.snapshot.paramMap.get('ciclo')
     this.mes = this.route.snapshot.paramMap.get('mes')

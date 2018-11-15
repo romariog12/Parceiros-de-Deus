@@ -1,16 +1,25 @@
 
 <div class="card bg-light">
-<div  *ngIf="mensagem == 1">
+<!-- <div  *ngIf="mensagem == 1">
     <div class="alert alert-success" role="alert">
         Salvo com sucesso!
      </div>
   </div>
+  <div  *ngIf="mensagem == 3">
+    <div class="alert alert-danger" role="alert">
+       Erro de consistência!
+     </div>
+  </div> -->
+  
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link btn {{abaAtiva}}" id="abaLideresAtivos"  (click)="lideresAtivos()">Ativos</a>
+    <a class="nav-link btn {{abaAtiva}}" id="abaLideresAtivos"  (click)="lideresAtivos(0)"><span *ngIf="acao == 'ativos'" class="badge badge-warning">{{totalElementos}}</span> Ativos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link btn" id="abaLideresInativos" (click)="lideresInativos()">Inativos</a>
+    <a class="nav-link btn" id="abaLideresInativos" (click)="lideresInativos(0)"><span *ngIf="acao == 'inativos'" class="badge badge-warning">{{totalElementos}}</span> Inativos</a>
+  </li>
+  <li class="nav-item">
+    <span class="btn-link btn" routerLink="cadastrarLider">cadastrar</span>
   </li>
 </ul>
 <table class="table table-hover table-sm">
@@ -28,13 +37,46 @@
       <td>
         <span *ngIf="acao == 'ativos'">
           <button (click)="inativarLider(lider.idlider)" class="btn btn-outline-warning btn-sm ">Inativar</button>
+          <button  routerLink="/editarLider/{{lider.idlider}}"class="btn btn-outline-primary btn-sm ">Editar</button>
+        
         </span>
         <span *ngIf="acao == 'inativos'">
             <button (click)="ativarLider(lider.idlider)" class="btn btn-outline-success btn-sm ">Ativar</button>
-            <button (click)="excluirLider(lider.idlider)" class="btn btn-outline-danger btn-sm">Excluir</button>
+            <button  routerLink="/editarLider/{{lider.idlider}}"class="btn btn-outline-primary btn-sm ">Editar</button>
+            <button (click)="excluirLider(lider.idlider)" class="btn btn-outline-danger btn-sm">Excluir definitivamente</button>
         </span>
       </td>
     </tr>
   </tbody>
 </table>
+<nav  class="justify-content-center d-flex">
+  <ul class="pagination">
+    <li  class="page-item" id="anterior">
+      <a  *ngIf="acao == 'ativos'"class="page-link"  (click)="lideresAtivos(anterior)">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+      <a  *ngIf="acao == 'inativos'"class="page-link" (click)="lideresInativos(anterior)">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <span *ngFor="let pag  of paginacao; let i = index">
+      <li  *ngIf="acao == 'ativos'" id="page-{{i}}" class="page-item btn-link "><a class="page-link" (click)="lideresAtivos(i)">{{i+1}}</a></li>
+      <li *ngIf="acao == 'inativos'" id="page-{{i}}" class="page-item btn-link "><a class="page-link" (click)="lideresInativos(i)">{{i+1}}</a></li>
+    </span>
+    <li class="page-item" id="proximo">
+      <a  *ngIf="acao == 'ativos'"class="page-link" (click)="lideresAtivos(proximo)">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+      <a  *ngIf="acao == 'inativos'"class="page-link" (click)="lideresInativos(proximo)">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+  
+</nav>
+<div  *ngIf="lider == ''">
+  <div class="alert alert-warning" role="alert">
+     Sem dados a apresentar!
+   </div>
+</div>
 </div>

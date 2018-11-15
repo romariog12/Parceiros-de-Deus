@@ -12,14 +12,14 @@ import { Observable } from 'rxjs/Observable';
 export class CadastrarEquipeComponent implements OnInit {
   public lider: Lider;
   public equipe: Equipe;
-  public listaLider: Lider[];
+  public lideres: Lider[];
   public mensagem;
   constructor(private service: PdService) { }
 
   ngOnInit(): void {
     this.lider = new Lider;
     this.equipe = new Equipe;
-    this.service.listaLider().subscribe(data =>{this.listaLider = data});
+    this.service.lideres().subscribe(data =>{this.lideres = data});
   }
  
   public cadastrarEquipe(){

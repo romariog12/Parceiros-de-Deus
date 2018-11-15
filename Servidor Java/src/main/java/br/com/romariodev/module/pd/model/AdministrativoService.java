@@ -2,7 +2,10 @@ package br.com.romariodev.module.pd.model;
 
 import java.util.Calendar;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
+
 import br.com.romariodev.module.pd.entity.Equipe;
 import br.com.romariodev.module.pd.entity.Lider;
 import br.com.romariodev.module.pd.entity.Pd;
@@ -11,9 +14,10 @@ import br.com.romariodev.module.pd.repository.EquipeRepository;
 import br.com.romariodev.module.pd.repository.LiderRepository;
 import br.com.romariodev.module.pd.repository.PdRepository;
 import br.com.romariodev.module.pd.repository.SubRepository;
-import br.com.romariodev.module.pd.util.Mensagens;
+import br.com.romariodev.module.pd.util.CodigoMensagem;
 
 @Service
+@RestController		
 public class AdministrativoService extends AbstractService {
 
 	AdministrativoService(PdRepository pdRepository,
@@ -55,9 +59,9 @@ public class AdministrativoService extends AbstractService {
 					}
 				}
 			}
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 	}
 
@@ -65,18 +69,26 @@ public class AdministrativoService extends AbstractService {
 		try {
 			Pd pd = this.pdRepository.findByIdpd(id);
 			this.pdRepository.delete(pd);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 	}
 
 	public int cadastrarSub(Sub sub) {
 		try {
 			this.subRepository.save(sub);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
+		}
+	}
+	public int editarSub(Sub sub) {
+		try {
+			this.subRepository.save(sub);
+			return CodigoMensagem.SUCESSO;
+		} catch (Exception e) {
+			return CodigoMensagem.ERRO;
 		}
 	}
 
@@ -84,16 +96,16 @@ public class AdministrativoService extends AbstractService {
 		try {
 			Sub sub = this.subRepository.findByIdSub(id);
 			if (!sub.getSubs().isEmpty()) {
-				return Mensagens.ERRO_CONSISTENCIA;
+				return CodigoMensagem.ERRO_CONSISTENCIA;
 			} else {
 				List<Pd> pd = this.pdRepository.findByLiderIdlider(sub
 						.getLider().getIdlider());
 				this.pdRepository.deleteAll(pd);
 				this.subRepository.delete(sub);
-				return Mensagens.SUCESSO;
+				return CodigoMensagem.SUCESSO;
 			}
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 	}
 
@@ -102,9 +114,9 @@ public class AdministrativoService extends AbstractService {
 			Sub sub = this.subRepository.findByIdSub(id);
 			sub.setStatus(-1);
 			this.subRepository.save(sub);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 	}
 
@@ -113,27 +125,43 @@ public class AdministrativoService extends AbstractService {
 			Sub sub = this.subRepository.findByIdSub(id);
 			sub.setStatus(1);
 			this.subRepository.save(sub);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 	}
 
 	public int cadastrarlider(Lider lider) {
 		try {
 			this.liderRepository.save(lider);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
+		}
+	}
+	public int editarlider(Lider lider) {
+		try {
+			this.liderRepository.save(lider);
+			return CodigoMensagem.SUCESSO;
+		} catch (Exception e) {
+			return CodigoMensagem.ERRO;
 		}
 	}
 
 	public int cadastrarEquipe(Equipe equipe) {
 		try {
 			this.equipeRepository.save(equipe);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
+		}
+	}
+	public int editarEquipe(Equipe equipe) {
+		try {
+			this.equipeRepository.save(equipe);
+			return CodigoMensagem.SUCESSO;
+		} catch (Exception e) {
+			return CodigoMensagem.ERRO;
 		}
 	}
 
@@ -141,40 +169,38 @@ public class AdministrativoService extends AbstractService {
 		try {
 			Equipe equipe = this.equipeRepository.findByIdEquipe(id);
 			if (!equipe.getSubs().isEmpty()) {
-				return Mensagens.ERRO_CONSISTENCIA;
+				return CodigoMensagem.ERRO_CONSISTENCIA;
 			} else {
 
 				List<Pd> pd = this.pdRepository.findByEquipeIdEquipe(id);
 				this.pdRepository.deleteAll(pd);
 				this.equipeRepository.delete(equipe);
-				return Mensagens.SUCESSO;
+				return CodigoMensagem.SUCESSO;
 			}
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 	}
 
 	public int excluirLider(int id) {
-		try {
+		
 			Lider lider = this.liderRepository.findByIdlider(id);
 			Equipe equipe = this.equipeRepository.findByLiderIdlider(id);
 			Sub sub = this.subRepository.findByLiderIdlider(id);
 			if(equipe!=null){
-				return Mensagens.ERRO_CONSISTENCIA;
+				return CodigoMensagem.ERRO_CONSISTENCIA;
 			}
 			if(!sub.getSubs().isEmpty()){
-				return Mensagens.ERRO_CONSISTENCIA;
+				return CodigoMensagem.ERRO_CONSISTENCIA;
 			}
 			if (lider.getConjugue() != null) {
 				lider.getConjugue().setConjugue(null);
 			}
 			List<Pd> pd = this.pdRepository.findByLiderIdlider(id);
-			this.pdRepository.deleteAll(pd);
+			if(!pd.isEmpty())
+				this.pdRepository.deleteAll(pd);
 			this.liderRepository.delete(lider);
-			return Mensagens.SUCESSO;
-		} catch (Exception e) {
-			return Mensagens.ERRO;
-		}
+			return CodigoMensagem.SUCESSO;
 	}
 
 	public int inativarLider(int id) {
@@ -182,9 +208,9 @@ public class AdministrativoService extends AbstractService {
 			Lider lider = this.liderRepository.findByIdlider(id);
 			lider.setStatus(-1);
 			this.liderRepository.save(lider);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 
 	}
@@ -194,9 +220,9 @@ public class AdministrativoService extends AbstractService {
 			Lider lider = this.liderRepository.findByIdlider(id);
 			lider.setStatus(1);
 			this.liderRepository.save(lider);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 
 	}
@@ -206,9 +232,9 @@ public class AdministrativoService extends AbstractService {
 			Equipe equipe = this.equipeRepository.findByIdEquipe(id);
 			equipe.setStatus(-1);
 			this.equipeRepository.save(equipe);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 
 	}
@@ -218,9 +244,9 @@ public class AdministrativoService extends AbstractService {
 			Equipe equipe = this.equipeRepository.findByIdEquipe(id);
 			equipe.setStatus(1);
 			this.equipeRepository.save(equipe);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 	}
 

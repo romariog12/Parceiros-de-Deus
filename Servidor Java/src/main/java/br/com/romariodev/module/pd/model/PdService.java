@@ -4,15 +4,15 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
 import br.com.romariodev.module.pd.entity.Equipe;
+import br.com.romariodev.module.pd.entity.Lider;
 import br.com.romariodev.module.pd.entity.Pd;
 import br.com.romariodev.module.pd.repository.EquipeRepository;
 import br.com.romariodev.module.pd.repository.LiderRepository;
 import br.com.romariodev.module.pd.repository.PdRepository;
 import br.com.romariodev.module.pd.repository.SubRepository;
-import br.com.romariodev.module.pd.util.Mensagens;
+import br.com.romariodev.module.pd.util.CodigoMensagem;
 
 @Service
 public class PdService extends AbstractService {
@@ -30,9 +30,9 @@ public class PdService extends AbstractService {
 			//this.pdRepository.findById(new Long(pd.getIdpd()));
 			this.pdRepository.pdSemanal(semana, pd.getIndividual(),
 					pd.getCelula(), pd.getLider().getIdlider(), mes + 1, ano);
-			return Mensagens.SUCESSO;
+			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
-			return Mensagens.ERRO;
+			return CodigoMensagem.ERRO;
 		}
 	}
 
@@ -99,4 +99,5 @@ public class PdService extends AbstractService {
 		perfil.setPd(pd);
 		return perfil;
 	}
+
 }

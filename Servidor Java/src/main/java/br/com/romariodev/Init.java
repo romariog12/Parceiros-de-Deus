@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -18,5 +19,5 @@ public class Init  extends SpringBootServletInitializer{
             SpringApplication.run(Init.class, args);
             // Suppress log messages in stdout.
             LogManager.getLogManager().reset();
-          }
+          }	
 }

@@ -4,7 +4,6 @@ import { Equipe } from './pd/models/equipe.model';
 import { Lider } from './pd/models/lider.model';
 import { Pd } from './pd/models/pd.model';
 import { Sub } from './pd/models/sub.model';
-import { cicloAtual } from './pd/models/ciclo.model';
 import { Perfil } from './pd/models/perfil.model';
 
 const httpOptions = {
@@ -16,6 +15,9 @@ export class PdService {
   constructor(private http: HttpClient) { }
   public cadastrarEquipe (equipe){
     return this.http.post<Equipe>(httpUrl+'pd/cadastrarEquipe',equipe, httpOptions);
+  }
+  public editarEquipe (equipe){
+    return this.http.post<Equipe>(httpUrl+'pd/editarEquipe',equipe, httpOptions);
   }
   public cadastrarLider(lider){
     return this.http.post<Lider>(httpUrl+'pd/cadastrarlider', lider, httpOptions);
@@ -45,20 +47,35 @@ export class PdService {
   public cadastrarSub (sub){
     return this.http.post<Sub>(httpUrl+'pd/cadastrarSub',sub, httpOptions);
   }
+  public editarSub (sub){
+    return this.http.post<Sub>(httpUrl+'pd/editarSub',sub, httpOptions);
+  }
   public getEquipe(id){
     return this.http.get<Equipe>(httpUrl+'pd/getEquipe/'+id)
   }
-  public listaEquipe(){
+  public listaEquipe(page){
+    return this.http.get<Equipe[]>(httpUrl+'pd/equipes/'+page)
+  }
+  public equipes(){
     return this.http.get<Equipe[]>(httpUrl+'pd/equipes')
   }
-  public equipesInativas(){
-    return this.http.get<Equipe[]>(httpUrl+'pd/equipesInativas')
+  public equipesInativas(page){
+    return this.http.get<Equipe[]>(httpUrl+'pd/equipesInativas/'+page)
   }
-  public listaLider(){
+  public listaLider(page:number){
+    return this.http.get<Lider[]>(httpUrl+'pd/lideres/'+page)
+  }
+  public lideres(){
     return this.http.get<Lider[]>(httpUrl+'pd/lideres')
   }
-  public lideresInativos(){
-    return this.http.get<Lider[]>(httpUrl+'pd/lideresInativos')
+  public editarLider(lider){
+    return this.http.post(httpUrl+'pd/editarlider',lider)
+  }
+  public lider(id){
+    return this.http.get<Lider>(httpUrl+'pd/lider/'+id)
+  }
+  public lideresInativos(page){
+    return this.http.get<Lider[]>(httpUrl+'pd/lideresInativos/'+page)
   }
   public excluirLider(id){
     return this.http.get(httpUrl+'pd/excluirLider/'+id)

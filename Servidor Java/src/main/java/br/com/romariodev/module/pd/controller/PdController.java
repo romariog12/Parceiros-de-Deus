@@ -7,6 +7,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.EventPublishingRunListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +27,7 @@ import br.com.romariodev.module.pd.entity.Sub;
 import br.com.romariodev.module.pd.model.AdministrativoService;
 import br.com.romariodev.module.pd.model.PdService;
 import br.com.romariodev.module.pd.model.Perfil;
-import br.com.romariodev.module.pd.util.Mensagens;
+import br.com.romariodev.module.pd.util.CodigoMensagem;
 import br.com.romariodev.module.pd.util.Utilitarios;
 
 @RestController
@@ -36,19 +40,28 @@ public class PdController extends AbstractController {
 
 	@PostMapping("/cadastrarlider")
 	public @ResponseBody String cadastratLider(@RequestBody Lider lider) {
-		if (this.admService.cadastrarlider(lider) == Mensagens.SUCESSO) {
+		if (this.admService.cadastrarlider(lider) == CodigoMensagem.SUCESSO) {
 			return "Cadastro realizado com sucesso!";
-		} else if (this.admService.cadastrarlider(lider) == Mensagens.CADASTRO_EXISTENTE) {
+		} else if (this.admService.cadastrarlider(lider) == CodigoMensagem.CADASTRO_EXISTENTE) {
 			return "Cadastro existente";
 		} else {
 			return "Cadastro não realizado! erro interno! \n Código:["
 					+ this.admService.cadastrarlider(lider) + "]";
 		}
 	}
+	@PostMapping("/editarlider")
+	public @ResponseBody int editarLider(@RequestBody Lider lider) { 
+			return this.admService.editarlider(lider);
+	}
 
 	@PostMapping(path = "/cadastrarEquipe")
 	public @ResponseBody int cadastrarEquipe(@RequestBody Equipe equipe) {
 		return this.admService.cadastrarEquipe(equipe);
+
+	}
+	@PostMapping(path = "/editarEquipe")
+	public @ResponseBody int editarEquipe(@RequestBody Equipe equipe) {
+		return this.admService.editarEquipe(equipe);
 
 	}
 
@@ -78,8 +91,8 @@ public class PdController extends AbstractController {
 	}
 
 	@GetMapping(path = "getEquipe/{id}")
-	public @ResponseBody Equipe getEquipe(@PathVariable int id) {
-		return this.pdService.getEquipe(id);
+	public @ResponseBody Equipe equipe(@PathVariable int id) {
+		return this.pdService.equipe(id);
 	}
 
 	@PostMapping(path = "/excluirSub")
@@ -163,24 +176,55 @@ public class PdController extends AbstractController {
 		return this.pdService.listaPdIndividualPorMes(mes, ano);
 	}
 
+	@GetMapping(path = "/lideres/{page}")
+	public @ResponseBody Iterable<Lider> lideres(@PathVariable int page, Pageable p) {
+		if(page == 88888)
+			return this.pdService.lideres(p.previousOrFirst());
+		if(page == 99999)
+			return this.pdService.lideres(p.next());
+		return this.pdService.lideres(PageRequest.of(page, 10));
+	}
 	@GetMapping(path = "/lideres")
 	public @ResponseBody Iterable<Lider> lideres() {
 		return this.pdService.lideres();
 	}
 
-	@GetMapping(path = "/lideresInativos")
-	public @ResponseBody Iterable<Lider> lideresInativos() {
-		return this.pdService.lideresInativos();
+	@GetMapping(path = "/lider/{id}")
+	public @ResponseBody Lider lider(@PathVariable int id) {
+		return this.pdService.lider(id);
+	}
+	@GetMapping(path = "/lideresInativos/{page}")
+	public @ResponseBody Iterable<Lider> lideresInativos(@PathVariable int page, Pageable p) {
+		if(page == 88888)
+			return this.pdService.lideresInativos(p.previousOrFirst());
+		if(page == 99999)
+			return this.pdService.lideresInativos(p.next());
+
+		return this.pdService.lideresInativos(PageRequest.of(page, 10));
 	}
 
+	@GetMapping(path = "/equipes/{page}")
+	public @ResponseBody Iterable<Equipe> equipes(@PathVariable int page, Pageable p) {
+		if(page == 88888)
+			return this.pdService.equipes(p.previousOrFirst());
+		if(page == 99999)
+			return this.pdService.equipes(p.next());
+		
+		return this.pdService.equipes(PageRequest.of(page, 10));
+	}
+	
 	@GetMapping(path = "/equipes")
 	public @ResponseBody Iterable<Equipe> equipes() {
 		return this.pdService.equipes();
 	}
-
-	@GetMapping(path = "/equipesInativas")
-	public @ResponseBody Iterable<Equipe> equipesInativas() {
-		return this.pdService.equipesInativas();
+	
+	@GetMapping(path = "/equipesInativas/{page}")
+	public @ResponseBody Iterable<Equipe> equipesInativas(@PathVariable int page, Pageable p) {
+		if(page == 88888)
+			return this.pdService.equipesInativas(p.previousOrFirst());
+		if(page == 99999)
+			return this.pdService.equipesInativas(p.next());
+		return this.pdService.equipesInativas(PageRequest.of(page, 10));
 	}
 
 	@GetMapping(path = "/subs")
@@ -196,6 +240,10 @@ public class PdController extends AbstractController {
 	@PostMapping(path = "/cadastrarSub")
 	public @ResponseBody int cadastrarSub(@RequestBody Sub sub) {
 		return this.admService.cadastrarSub(sub);
+	}
+	@PostMapping(path = "/editarSub")
+	public @ResponseBody int editarSub(@RequestBody Sub sub) {
+		return this.admService.editarSub(sub);
 	}
 
 	@GetMapping(path = "/novoRelatorio/{semana}/{mes}/{ano}")

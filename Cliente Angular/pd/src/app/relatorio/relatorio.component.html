@@ -3,7 +3,7 @@
     <ol class="breadcrumb">
     <div class="d-flex flex-row-reverse">
         <div class="input-group">
-            <select [(ngModel)]="filtroMes" class="form-control form-control-sm col-sm-5">
+            <select [(ngModel)]="filtroMes" class="form-control form-control-sm ">
               <option value="01">01</option>
               <option value="02">02</option>
               <option value="03">03</option>
@@ -18,8 +18,8 @@
               <option value="12">12</option>
             </select>
             <select [(ngModel)]="filtroAno" class="form-control form-control-sm  ">
-              <option value="{{data | date:'yyyy'}}">{{data | date:'yyyy'}}</option>
-              <option value="2017">2017</option>
+              <option value="{{data | date:'yyyy'}}" >{{data | date:'yyyy'}}</option>
+              <option *ngFor="let ano of anos; let i = index" value="{{ano}}">{{ano}}</option>
             </select>
             <button (click)="filtrar()" class="btn btn-outline-dark btn-sm">Filtrar</button>
           </div>
@@ -67,7 +67,7 @@
       </li>
     </ul>
 
-    <table id="table" class="table table-hover table-sm" *ngIf="relatorio == false">
+    <table id="table" class="table table-sm" *ngIf="relatorio == false">
       <thead>
         <tr class="thead-dark">
           <th></th>
@@ -76,11 +76,10 @@
           <th>Individual</th>
           <th class="out">Célula</th>
           <th class="out">Total</th>
-          <th style="display: none;">Lançar</th>
         </tr>
       </thead>
       <tbody *ngFor="let pd of pd; let i = index">
-        <tr *ngIf="pd.individual + pd.celula == 0" class="alert alert-danger" id="pd-{{pd.idPd}}" routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{filtroMes}}/{{filtroAno}}">
+        <tr *ngIf="pd.individual + pd.celula == 0" class="alert alert-danger btn-danger " id="pd-{{pd.idPd}}" routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{filtroMes}}/{{filtroAno}}">
           <td style="background-color: rgb(241, 52, 52); width: 5px"><b>{{i+1}}º</b></td>
           <td>{{pd.equipe.nome}}</td>
           <td *ngIf="completo">{{pd.lider.nome}} <span *ngIf="pd.lider.conjugue"> e {{pd.equipe.lider.conjugue.nome}}</span></td>
@@ -89,10 +88,8 @@
           <td class="{{individualSuccess}}">R$ {{pd.individual | number}}</td>
           <td>R$ {{pd.celula | number}}</td>
           <td class="alert-link">R$ {{pd.individual + pd.celula | number}}</td>
-          <td style="display: none;"><button class="btn btn-sm btn-outline-danger"><img routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{mes}}/{{ano}}"
-                src="../../assets/lancar1.png" /></button></td>
         </tr>
-        <tr *ngIf="pd.individual + pd.celula >= 10" class="alert alert-success" id="pd-{{pd.idPd}}" routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{filtroMes}}/{{filtroAno}}">
+        <tr *ngIf="pd.individual + pd.celula >= 10" class="alert alert-success btn-success" id="pd-{{pd.idPd}}" routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{filtroMes}}/{{filtroAno}}">
           <td style="background-color: rgb(179, 240, 179); width: 5px"><b><span *ngIf="i+1 == 1"><img src="../../assets/pri.png" /></span><span
                 *ngIf="i+1 != 1">{{i+1}}º</span></b></td>
           <td>{{pd.equipe.nome}}</td>
@@ -102,10 +99,9 @@
           <td class="{{individualSuccess}}">R$ {{pd.individual | number}}</td>
           <td>R$ {{pd.celula | number}}</td>
           <td class="alert-link">R$ {{pd.individual + pd.celula | number}}</td>
-          <td style="display: none;" class="lancar"><button class="btn btn-sm btn-outline-success"><img routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{mes}}/{{ano}}"
-                src="../../assets/lancar1.png" /></button></td>
+  
         </tr>
-        <tr *ngIf="(pd.celula + pd.individual > 0) && (pd.celula + pd.individual < 10)" class="alert alert-warning" id="pd-{{pd.idPd}}"
+        <tr *ngIf="(pd.celula + pd.individual > 0) && (pd.celula + pd.individual < 10)" class="alert alert-warning btn-warning" id="pd-{{pd.idPd}}"
           routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{filtroMes}}/{{filtroAno}}">
           <td style="background-color: rgb(255, 245, 111);  width: 5px"><b>{{i+1}}º</b></td>
           <td>{{pd.equipe.nome}}</td>
@@ -116,8 +112,7 @@
           <td class="{{individualWarning}}">R$ {{pd.individual | number}}</td>
           <td>R$ {{pd.celula | number}}</td>
           <td class="alert-link">R$ {{pd.individual + pd.celula | number}}</td>
-          <td style="display: none;"><button class="btn btn-sm btn-outline-warning"><img routerLink="lancarPd/{{pd.equipe.idEquipe}}/{{ciclo}}/{{mes}}/{{ano}}"
-                src="../../assets/lancar1.png" /></button></td>
+         
         </tr>
 
       </tbody>
@@ -127,7 +122,7 @@
         <th>R$ {{totalIndividual | number}}</th>
         <th>R$ {{totalCelula | number}}</th>
         <th>R$ {{totalIndividual + totalCelula | number}}</th>
-        <th style="display: none;"></th>
+        
       </tr>
     </table>
 
@@ -227,19 +222,12 @@
         <th colspan="2">Total</th>
         <th></th>
         <th>{{totalIndividual | number}}</th>
-
       </tr>
     </table>
-
-    <div *ngIf="pd == '' && ciclo <= semana">
-      <div>
-        <button (click)="novoRelatorio(ciclo)" class="btn btn-success">Novo Relatório *</button>
-      </div>
-    </div>
     <div *ngIf="ciclo > semana" class="mx-auto" style="width: 200px;">
       <img routerLink="lancarPd/{{pd.equipe.idEquipe}}" src="../../assets/anigif.gif" />
     </div>
-
-  </div>
- 
+    <button *ngIf="relatorio == false" class="btn btn-warning btn-sm " (click)="restartarRelatorio()">Gerar Novo Relatório</button>
+  
+<br></div>
 </div>

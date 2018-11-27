@@ -17,7 +17,7 @@ import br.com.romariodev.module.pd.repository.SubRepository;
 import br.com.romariodev.module.pd.util.CodigoMensagem;
 
 @Service
-@RestController		
+@RestController
 public class AdministrativoService extends AbstractService {
 
 	AdministrativoService(PdRepository pdRepository,
@@ -64,6 +64,17 @@ public class AdministrativoService extends AbstractService {
 			return CodigoMensagem.ERRO;
 		}
 	}
+	public int restartarRelatorio(int semana, int mes, int ano) {
+		if (mes == 0) {
+			Calendar data = Calendar.getInstance();
+			mes = data.get(Calendar.MONTH) + 1;
+			ano = data.get(Calendar.YEAR);
+		}
+		 List<Pd> pd = this.pdRepository.listaPd(semana, mes, ano);
+		 this.pdRepository.deleteAll(pd);
+		 this.novoRelatorio(semana, mes, ano);
+		 return CodigoMensagem.SUCESSO;
+	}
 
 	public int excluirLancamentoPd(int id) {
 		try {
@@ -77,12 +88,14 @@ public class AdministrativoService extends AbstractService {
 
 	public int cadastrarSub(Sub sub) {
 		try {
+			sub.setStatus(1);
 			this.subRepository.save(sub);
 			return CodigoMensagem.SUCESSO;
 		} catch (Exception e) {
 			return CodigoMensagem.ERRO;
 		}
 	}
+
 	public int editarSub(Sub sub) {
 		try {
 			this.subRepository.save(sub);
@@ -112,6 +125,12 @@ public class AdministrativoService extends AbstractService {
 	public int inativarSub(int id) {
 		try {
 			Sub sub = this.subRepository.findByIdSub(id);
+			if (!sub.getSubs().isEmpty()){
+				for (Sub s: sub.getSubs()) {
+					if(s.getStatus() == 1);
+					return CodigoMensagem.ERRO_CONSISTENCIA;
+				}
+			}
 			sub.setStatus(-1);
 			this.subRepository.save(sub);
 			return CodigoMensagem.SUCESSO;
@@ -139,6 +158,7 @@ public class AdministrativoService extends AbstractService {
 			return CodigoMensagem.ERRO;
 		}
 	}
+
 	public int editarlider(Lider lider) {
 		try {
 			this.liderRepository.save(lider);
@@ -156,6 +176,7 @@ public class AdministrativoService extends AbstractService {
 			return CodigoMensagem.ERRO;
 		}
 	}
+
 	public int editarEquipe(Equipe equipe) {
 		try {
 			this.equipeRepository.save(equipe);
@@ -183,29 +204,38 @@ public class AdministrativoService extends AbstractService {
 	}
 
 	public int excluirLider(int id) {
-		
-			Lider lider = this.liderRepository.findByIdlider(id);
-			Equipe equipe = this.equipeRepository.findByLiderIdlider(id);
-			Sub sub = this.subRepository.findByLiderIdlider(id);
-			if(equipe!=null){
-				return CodigoMensagem.ERRO_CONSISTENCIA;
-			}
-			if(!sub.getSubs().isEmpty()){
-				return CodigoMensagem.ERRO_CONSISTENCIA;
-			}
-			if (lider.getConjugue() != null) {
-				lider.getConjugue().setConjugue(null);
-			}
-			List<Pd> pd = this.pdRepository.findByLiderIdlider(id);
-			if(!pd.isEmpty())
-				this.pdRepository.deleteAll(pd);
-			this.liderRepository.delete(lider);
-			return CodigoMensagem.SUCESSO;
+
+		Lider lider = this.liderRepository.findByIdlider(id);
+		Equipe equipe = this.equipeRepository.findByLiderIdlider(id);
+		Sub sub = this.subRepository.findByLiderIdlider(id);
+		if (equipe != null) {
+			return CodigoMensagem.ERRO_CONSISTENCIA;
+		}
+		if (!sub.getSubs().isEmpty()) {
+			return CodigoMensagem.ERRO_CONSISTENCIA;
+		}
+		if (lider.getConjugue() != null) {
+			lider.getConjugue().setConjugue(null);
+		}
+		List<Pd> pd = this.pdRepository.findByLiderIdlider(id);
+		if (!pd.isEmpty())
+			this.pdRepository.deleteAll(pd);
+		this.liderRepository.delete(lider);
+		return CodigoMensagem.SUCESSO;
 	}
 
 	public int inativarLider(int id) {
 		try {
 			Lider lider = this.liderRepository.findByIdlider(id);
+			Equipe equipe = equipeRepository.findByLiderIdlider(id);
+			if(equipe != null){
+				if(inativarEquipe(equipe.getIdEquipe()) == CodigoMensagem.ERRO_CONSISTENCIA)
+					return CodigoMensagem.ERRO_CONSISTENCIA;
+				
+				lider.setStatus(-1);
+				this.liderRepository.save(lider);
+				return CodigoMensagem.SUCESSO_DEPENDENCIAS;
+			}
 			lider.setStatus(-1);
 			this.liderRepository.save(lider);
 			return CodigoMensagem.SUCESSO;
@@ -230,6 +260,12 @@ public class AdministrativoService extends AbstractService {
 	public int inativarEquipe(int id) {
 		try {
 			Equipe equipe = this.equipeRepository.findByIdEquipe(id);
+			if (!equipe.getSubs().isEmpty()) {
+				for (Sub sub : equipe.getSubs()) {
+					if(sub.getStatus() == 1)
+						return CodigoMensagem.ERRO_CONSISTENCIA;
+				}
+			}
 			equipe.setStatus(-1);
 			this.equipeRepository.save(equipe);
 			return CodigoMensagem.SUCESSO;

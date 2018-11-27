@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.EventPublishingRunListener;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -99,12 +97,17 @@ public class PdController extends AbstractController {
 	public @ResponseBody int excluirSub(@RequestBody int id) {
 		return this.admService.excluirSub(id);
 	}
+	@GetMapping(path = "/sub/{id}")
+	public @ResponseBody Sub sub(@PathVariable int id) {
+		return this.pdService.sub(id);
+	}
 	@GetMapping(path = "/excluirLider/{id}")
 	public @ResponseBody int excluirLider(@PathVariable int id) {
 		return this.admService.excluirLider(id);
 	}
-	@PostMapping(path = "/inativarSub")
-	public @ResponseBody int inativarSub(@RequestBody int id) {
+	@GetMapping(path = "/inativarSub/{id}")
+	public @ResponseBody int inativarSub(@PathVariable int id) {
+		System.out.println("Teste");
 		return this.admService.inativarSub(id);
 	}
 
@@ -131,6 +134,15 @@ public class PdController extends AbstractController {
 			semana = Integer.parseInt(df.format(new Date()));
 		}
 		return this.pdService.listaPdCelula(semana, mes, ano);
+	}
+	@GetMapping(path = "/restartarRelatorio/{semana}/{mes}/{ano}")
+	public @ResponseBody int restartarRelatorio(@PathVariable int semana,
+			@PathVariable int mes, @PathVariable int ano) {
+		if (semana == 0) {
+			DateFormat df = new SimpleDateFormat("W");
+			semana = Integer.parseInt(df.format(new Date()));
+		}
+		return this.admService.restartarRelatorio(semana, mes, ano);
 	}
 
 	@PostMapping(path = "/listaPdCompleto")
@@ -258,8 +270,8 @@ public class PdController extends AbstractController {
 		return Integer.parseInt(df.format(new Date()));
 	}
 
-	@GetMapping(path = "/perfil/{idEquipe}")
-	public @ResponseBody Perfil perfil(@RequestBody @PathVariable int idEquipe) {
-		return this.pdService.perfil(idEquipe);
+	@GetMapping(path = "/perfil/{idEquipe}/{page}")
+	public @ResponseBody Perfil perfil(@PathVariable int idEquipe, @PathVariable int page) {
+		return this.pdService.perfil(idEquipe, page);
 	}
 }

@@ -1,21 +1,37 @@
 <div class="card bg-light">
   <div class="card-body">
-<div class="form-row">
-<div class="col">
-<input [(ngModel)]="sub.nome" class="form-control" id="subNome" name="subNome" placeholder="Nome">
-</div>
-<div class="col">
-<select  [(ngModel)]="sub.lider" class="form-control">
-  <option *ngFor="let lider of lider" [ngValue]="lider">{{lider.nome}}</option>
-</select>
-</div>
-<div class="col">
-<select   [(ngModel)]="sub.equipe"  class="form-control ">
-  <option *ngFor="let equipe of equipe" [ngValue]="equipe">{{equipe.nome}}</option>
-</select>
-</div>
-<button class="btn btn-primary" (click)="cadastrarSub()">Salvar</button>
+      <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/equipes">Equipes</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Transferir Sub Equipe</li>
+        </ol>
+      <table  class="table table-hover table-sm">
+          <thead>
+              <tr class="thead-dark">
+                <th>Nome</th>
+                <th>Líder</th>
+                <th>Equipe</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="sub-{{sub.idSub}}">
+                <td><input [(ngModel)]="sub.nome" class="form-control" id="subNome" name="subNome" placeholder="Nome"></td>
+                <td>
+                  <select  [(ngModel)]="sub.lider" name="lider"class="form-control">
+                    <option [ngValue]="sub.lider" selected>{{sub.lider.nome}}</option>
+                    <option *ngFor="let l of lider" [ngValue]="l">{{l.nome}}</option>
+                  </select>
+                </td>
+                <td>
+                  <select   [(ngModel)]="sub.equipe"  class="form-control "name="equipe">
+                    <option *ngFor="let e of equipe" [ngValue]="e">{{e.nome}}</option>
+                  </select>
+                </td>
+                <td><button class="btn btn-primary" (click)="cadastrarSub()">Salvar</button></td>
+              </tr>
 
-</div>
+
+            </tbody>
+</table>
 </div>
 </div>

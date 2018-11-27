@@ -1,19 +1,21 @@
 <p>
   {{perfil.equipe.nome}}
 </p>
-<ul class="nav nav-tabs" >
-    <li  class="nav-item  ">
-      <span  class="nav-link btn btn-link {{ativo}}" id="perfilSubs" (click)="sub()" >Sub-Equipes</span>
-    </li>
-    <li  class="nav-item  ">
-      <span class="nav-link btn btn-link" id="perfilAdministracao" (click)="administracao()" >Administração</span>
-    </li>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link btn {{abaAtiva}}" id="abaSubsAtivas"  (click)="subsAtivas(0)"><span *ngIf="acao == 'ativos'" class="badge badge-warning">{{paginacao.totalElementos}}</span>Sub Equipes</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link btn" id="abaSubsInativas" (click)="subsInativas(0)"><span *ngIf="acao == 'inativos'" class="badge badge-warning">{{paginacao.totalElementos}}</span> Inativos</a>
+  </li>
+  <li class="nav-item">
+    <span class="btn-link btn" routerLink="perfil/cadastrarSub">cadastrar</span>
+  </li>
 </ul>
-<div *ngIf="aba == 'subsAba'">
-<div *ngIf="perfil.equipe.subs == '';else subs" class="alert alert-warning" role="alert">
+<div *ngIf="acao == 'ativos'">
+<div *ngIf="perfil.subs == '';else subs" class="alert alert-warning" role="alert">
     Nenhuma sub cadastrada!
  </div>
- <ng-template #subs>
     <table class="table table-sm">
         <thead>
           <tr class="thead-dark">
@@ -23,18 +25,40 @@
             <th>Ação</th>
           </tr>
         </thead>
-        <tbody *ngFor="let subs of perfil.equipe.subs"  >
-          <tr *ngIf="subs.status == 1" id="sub-{{subs.idsub}}">
+        <tbody *ngFor="let subs of perfil.subs.content"  >
+          <tr  id="sub-{{subs.idsub}}">
             <td class="bg-warning"></td>
             <td><span class="btn btn-link">{{subs.nome}}</span></td>
             <td><span class="btn btn-link">{{subs.lider.nome}}<span *ngIf="subs.lider.conjugue"> e {{subs.lider.conjugue.nome}}</span></span></td>
-            <td ><button  class="btn btn-link"(click)="inativarSub(subs.idSub)">Inativar</button></td>
+            <td >
+              <button  class="btn btn-outline-warning btn-sm"(click)="inativarSub(subs.idSub)">Inativar</button>
+              <button  class="btn btn-outline-primary btn-sm" routerLink="/editarSub/{{subs.idSub}}">Editar</button>
+            </td>
+            
           </tr>
         </tbody>
         </table>
- </ng-template>
  </div>
- <div *ngIf="aba == 'administracaoAba'">
-
-  
+ <div *ngIf="acao == 'inativos'">
+    <table class="table table-sm">
+        <thead>
+          <tr class="thead-dark">
+            <th></th>
+            <th>Nome</th>
+            <th>Líder</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let subs of perfil.equipe.subs.content"  >
+          <tr *ngIf="subs.status == -1" id="sub-{{subs.idsub}}">
+            <td class="bg-warning"></td>
+            <td><span class="btn btn-link">{{subs.nome}}</span></td>
+            <td><span class="btn btn-link">{{subs.lider.nome}}<span *ngIf="subs.lider.conjugue"> e {{subs.lider.conjugue.nome}}</span></span></td>
+            <td >
+              <button  class="btn btn-success btn-sm"(click)="ativarSub(subs.idSub)">Ativar</button>
+              <button  class="btn btn-danger btn-sm" (click)="excluirSub(subs.idSub)">Excluir definitivamente</button>
+            </td>
+          </tr>
+        </tbody>
+        </table>
  </div>

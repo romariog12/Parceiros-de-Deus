@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class EditarEquipeComponent implements OnInit {
   public lider: Lider;
-  public equipe: Equipe;
+  public equipe: Equipe= new Equipe;
   public lideres: Lider[];
   public mensagem;
   constructor(private service: PdService, private route: ActivatedRoute) { }

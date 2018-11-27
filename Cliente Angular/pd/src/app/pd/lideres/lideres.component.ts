@@ -86,7 +86,7 @@ export class LideresComponent implements OnInit {
     return this.service.inativarLider(id).subscribe(
       data => {
         this.mensagem = data;
-        if (this.mensagem == 1) {
+        if (this.mensagem == 1 || this.mensagem == 5) {
           $("#lider-" + id).hide(1000)
         }
       })

@@ -31,6 +31,9 @@ export class PdService {
   public listaPdCelula(semana: number,mes: number,ano: number){
     return this.http.get<Pd[]>(httpUrl+'pd/listaPdCelula/'+semana+"/"+mes+"/"+ano)
   }
+  public restartarRelatorio(semana: number,mes: number,ano: number){
+    return this.http.get(httpUrl+'pd/restartarRelatorio/'+semana+"/"+mes+"/"+ano)
+  }
   public listaPdEquipePorCiclo(semana: number,mes: number,ano: number){
     return this.http.get<Pd[]>(httpUrl+'pd/listaPdEquipePorCiclo/'+semana+"/"+mes+"/"+ano)
   }
@@ -59,6 +62,9 @@ export class PdService {
   public equipes(){
     return this.http.get<Equipe[]>(httpUrl+'pd/equipes')
   }
+  public subs(){
+    return this.http.get<Sub[]>(httpUrl+'pd/subs')
+  }
   public equipesInativas(page){
     return this.http.get<Equipe[]>(httpUrl+'pd/equipesInativas/'+page)
   }
@@ -73,6 +79,9 @@ export class PdService {
   }
   public lider(id){
     return this.http.get<Lider>(httpUrl+'pd/lider/'+id)
+  }
+  public sub(id){
+    return this.http.get<Sub>(httpUrl+'pd/sub/'+id)
   }
   public lideresInativos(page){
     return this.http.get<Lider[]>(httpUrl+'pd/lideresInativos/'+page)
@@ -99,7 +108,7 @@ export class PdService {
     return this.http.post(httpUrl+'pd/excluirSub',id)
   }
   public inativarSub(id){
-    return this.http.post(httpUrl+'pd/inativarSub',id)
+    return this.http.get(httpUrl+'pd/inativarSub/'+id)
   }
   public ativarSub(id){
     return this.http.post(httpUrl+'pd/ativarSub',id) 
@@ -113,7 +122,7 @@ export class PdService {
   public cicloAtual(){
     return this.http.get(httpUrl+'pd/cicloAtual')
   }
-  public perfil(idEquipe){
-    return this.http.get<Perfil>(httpUrl+'pd/perfil/'+idEquipe)
+  public perfil(idEquipe,page){
+    return this.http.get<Perfil>(httpUrl+'pd/perfil/'+idEquipe+'/'+page)
   }
 }

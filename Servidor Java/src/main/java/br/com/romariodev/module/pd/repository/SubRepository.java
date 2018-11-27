@@ -1,5 +1,7 @@
 package br.com.romariodev.module.pd.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -26,6 +28,7 @@ public interface SubRepository extends CrudRepository<Sub, Long>{
 			);
 	Iterable<Sub> findByStatus(int i);
 	Sub findByLiderIdlider(int id);
+	Page<Sub> findByEquipeIdEquipe(int id,  Pageable p);
 
 
 }

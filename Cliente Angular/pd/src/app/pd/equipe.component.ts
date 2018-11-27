@@ -13,8 +13,10 @@ export class EquipeComponent implements OnInit {
     private lider: Lider[];
     private equipe: Equipe[];
     private sub: Sub;
+    public getEquipe: Equipe
     public abaAtiva = "active"
     public acao = "ativos"
+    public subs = []
     private mensagem;
     public paginacao: paginacao = new paginacao()
     public paginacaoEquipes = [];
@@ -29,13 +31,23 @@ export class EquipeComponent implements OnInit {
     }
     public excluirEquipe(id: number) {
         this.service.excluirEquipe(id).subscribe(data => {
-        this.mensagem = data;
+            this.mensagem = data;
+            if (this.mensagem == 3) {
+                this.service.getEquipe(id).subscribe(data => {
+                    this.getEquipe = data,
+                    this.equipe.splice(0, this.equipe.length)
+                    this.equipe.push(this.getEquipe)
+                    this.sequenciaPaginacao.splice(0,this.sequenciaPaginacao.length)
+                })
+                
+            }
             if (this.mensagem == 1) {
                 $("#equipe-" + id).hide(1000)
             }
         });
     }
     public equipesInativas(page: number) {
+        this.mensagem = 0
         this.acao = "inativos"
         this.paginacao.anterior = 88888
         this.paginacao.proximo = 99999
@@ -43,9 +55,9 @@ export class EquipeComponent implements OnInit {
         $("#abaEquipesInativas").addClass(this.abaAtiva)
         this.service.equipesInativas(page).subscribe(data => {
             this.paginacaoEquipes = data,
-            this.equipe = this.paginacaoEquipes['content'],
-            this.paginacao.totalPagina = this.paginacaoEquipes['totalPages'],
-            this.paginacao.numeroPagina = this.paginacaoEquipes['number']
+                this.equipe = this.paginacaoEquipes['content'],
+                this.paginacao.totalPagina = this.paginacaoEquipes['totalPages'],
+                this.paginacao.numeroPagina = this.paginacaoEquipes['number']
             this.paginacao.totalElementos = this.paginacaoEquipes['totalElements']
             this.paginacao.elementosPorPagina = this.paginacaoEquipes['numberOfElements']
             let p = []
@@ -64,16 +76,17 @@ export class EquipeComponent implements OnInit {
         });
     }
     public equipesAtivas(page: number) {
+        this.mensagem = 0
         this.acao = "ativos"
         this.paginacao.anterior = 88888
         this.paginacao.proximo = 99999
         $("#abaEquipesAtivas").addClass(this.abaAtiva)
         $("#abaEquipesInativas").removeClass(this.abaAtiva)
         this.service.listaEquipe(page).subscribe(data => {
-        this.paginacaoEquipes = data,
-            this.equipe = this.paginacaoEquipes['content'],
-            this.paginacao.totalPagina = this.paginacaoEquipes['totalPages'],
-            this.paginacao.numeroPagina = this.paginacaoEquipes['number']
+            this.paginacaoEquipes = data,
+                this.equipe = this.paginacaoEquipes['content'],
+                this.paginacao.totalPagina = this.paginacaoEquipes['totalPages'],
+                this.paginacao.numeroPagina = this.paginacaoEquipes['number']
             this.paginacao.totalElementos = this.paginacaoEquipes['totalElements']
             this.paginacao.elementosPorPagina = this.paginacaoEquipes['numberOfElements']
             let p = []
@@ -92,17 +105,30 @@ export class EquipeComponent implements OnInit {
         });
     }
     public inativarEquipe(id: number) {
+        this.mensagem = 0
         this.service.inativarEquipe(id).subscribe(data => {
-        this.mensagem = data;
+            this.mensagem = data;
+            if (this.mensagem == 3) {
+                this.service.getEquipe(id).subscribe(data => {
+                    this.getEquipe = data
+                    for (let index = 0; index < this.getEquipe.subs.length; index++) {
+                        if(this.getEquipe.subs[index].status == -1)
+                            this.getEquipe.subs.splice(index)
+                    }
+                    this.equipe.splice(0, this.equipe.length)
+                    this.equipe.push(this.getEquipe)
+                    this.sequenciaPaginacao.splice(0,this.sequenciaPaginacao.length)
+                }) 
+            }
             if (this.mensagem == 1) {
                 $("#equipe-" + id).hide(1000)
             }
         });
-
     }
     public ativarEquipe(id: number) {
+        this.mensagem = 0
         this.service.ativarEquipe(id).subscribe(data => {
-        this.mensagem = data;
+            this.mensagem = data;
             if (this.mensagem == 1) {
                 $("#equipe-" + id).hide(1000)
             }
@@ -112,6 +138,13 @@ export class EquipeComponent implements OnInit {
 
     public excluirSub(id: number) {
         this.service.excluirSub(id).subscribe($("#sub-" + id).hide(1000));
+    }
+    public inativarSub(id){
+        this.service.inativarSub(id).subscribe(data=>{
+          if(data == 1) {
+            $("#sub-"+id).hide(1000)
+          }
+        })
     }
 
 }

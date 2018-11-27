@@ -1,20 +1,35 @@
-  <div class="card bg-light">
+<div class="card bg-light">
     <div class="card-body">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a routerLink="/equipes">Equipes</a></li>
             <li class="breadcrumb-item active" aria-current="page">Cadastrar</li>
           </ol>
-<div class="form-row">
-    <div class="col">
-  <input type="nome" [(ngModel)]="equipe.nome" class="form-control" id="equipeNome" name="equipeNome" placeholder="Nome">
-  </div>
-  <div class="col">
-  <select  [(ngModel)]="equipe.lider"  name="lider" id="lider"class="form-control">
-    <option *ngFor="let listaLider of lideres" [ngValue]="listaLider">{{listaLider.nome}}</option>
-  </select>
-  </div>
-  <button class="btn btn-primary" (click)="cadastrarEquipe()">Salvar</button>
-</div>
+          <table  class="table table-hover table-sm">
+              <thead>
+                  <tr class="thead-dark">
+                    <th>Nome</th>
+                    <th>Líder</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr id="sub-{{sub.idSub}}">
+                        <td>
+                            <div class="col">
+                              <input type="nome" [(ngModel)]="equipe.nome" class="form-control" id="equipeNome" name="equipeNome" placeholder="Nome">
+                            </div>
+                        </td>
+                        <td>
+                            <select  [(ngModel)]="equipe.lider"  name="lider" id="lider"class="form-control">
+                              <option *ngFor="let listaLider of lideres" [ngValue]="listaLider" >{{listaLider.nome}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" (click)="cadastrarEquipe()">Salvar</button>
+                        </td>
+                      </tr>
+                </tbody>
+              </table>
 </div>
 </div>
 <div  *ngIf="mensagem == 1">
@@ -24,6 +39,6 @@
 </div>
 <div  *ngIf="mensagem == 2">
   <div class="alert alert-danger" role="alert">
-      Não cadastrado!
+      Erro interno!
    </div>
 </div>

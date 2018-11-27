@@ -29,6 +29,7 @@ export class RelatorioComponent implements OnInit {
   public filtroAno: number = 0
   public filtroMes: number = 0
   public dataAtual
+  public anos = []
   constructor(private service: PdService) { }
 
   ngOnInit() {
@@ -36,8 +37,15 @@ export class RelatorioComponent implements OnInit {
     this.service.cicloAtual().subscribe(data => {
       this.ciclo = data,
         this.semana = this.ciclo,
-        $("#" + this.semana).html("Atual <span class='badge badge-warning'>" + this.semana + "</span>"),
-        $("#" + this.semana).addClass("active")
+        $(".nav-link").removeClass("active")
+      $("#" + this.semana).html("Atual <span class='badge badge-warning'>" + this.semana + "</span>")
+      $("#" + this.semana).addClass("active")
+      let i = 0;
+      this.dataAtual = new Date;
+      for (let x = this.dataAtual.getFullYear() - 1; x >= 2016; x--) {
+        this.anos[i] = x
+        i++;
+      }
     });
     this.service.listaPdEquipePorCiclo(0, this.filtroMes, this.filtroAno).subscribe(data => {
       this.pd = data,
@@ -46,7 +54,7 @@ export class RelatorioComponent implements OnInit {
       for (let index = 0; index < this.pd.length; index++) {
         this.totalCelula += this.pd[index].celula;
         this.totalIndividual += this.pd[index].individual;
-        
+
       }
     });
   }
@@ -73,11 +81,24 @@ export class RelatorioComponent implements OnInit {
     this.service.listaPdCelula(semana, this.filtroMes, this.filtroAno).subscribe(data => { this.pd = data })
     this.completo = true
   }
+  restartarRelatorio() {
+    let c = confirm("Tem certeza que deseja gerar um novo relatório?")
+    if (c == true){
+    this.service.restartarRelatorio(this.ciclo, this.filtroMes, this.filtroAno).subscribe(
+      data => { 
+        this.pdCiclo(this.ciclo)
+       })
+  }
+  else
+    return false;
+  }
   public excluirLancamentoPd(id) {
     this.service.excluirLancamentoPd(id).subscribe(data => { $("#pd-" + id).hide(1000) })
   }
   public novoRelatorio(semana) {
-    this.service.novoRelatorio(semana, this.filtroMes, this.filtroAno).subscribe(console.log)
+    
+      this.service.novoRelatorio(semana, this.filtroMes, this.filtroAno).subscribe(console.log)
+   
   }
   public pdMes() {
     this.reiniciaTotal();
@@ -139,15 +160,15 @@ export class RelatorioComponent implements OnInit {
   public reiniciaTotal() {
     this.totalCelula = 0;
     this.totalIndividual = 0;
+
   }
   public filtrar() {
-    this.dataAtual = new Date;
-    const mes = this.dataAtual.getMonth()+1
+    const mes = this.dataAtual.getMonth() + 1
     const ano = this.dataAtual.getFullYear()
-    if (mes == this.filtroMes && ano == this.filtroAno) {
+    if ((mes == this.filtroMes && ano == this.filtroAno) || (this.filtroAno == 0 || this.filtroMes == 0)) {
       return this.ngOnInit()
     } else {
-      this.semana = 5
+      this.ciclo = 5
       $("#" + this.semana).html("Ciclo " + this.semana)
       this.pdCiclo(this.semana)
     }

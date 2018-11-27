@@ -7,5 +7,5 @@ export class Sub {
     lider: Lider;
     equipe: Equipe;
     subs: Sub[];
-    status: number;
+    status: number = 1;
 }

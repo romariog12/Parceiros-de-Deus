@@ -21,10 +21,11 @@ const routes: Routes = [
   { path: 'listaPd/lancarPd/:id/:ciclo/:mes/:ano', component: LancarPdComponent },
   { path: 'equipes/cadastrarSub', component: SubComponent },
   { path: 'listaPd', component: RelatorioComponent },
-  { path: 'equipes/perfil/:id', component: PerfilComponent },
+  { path: 'equipes/perfil/:id/:page', component: PerfilComponent },
   { path: 'administracao', component: AdministracaoComponent },
   { path: 'editarLider/:id', component: editarLider },
-  { path: 'editarEquipe/:id', component: EditarEquipeComponent }
+  { path: 'editarEquipe/:id', component: CadastrarEquipeComponent },
+  { path: 'editarSub/:id', component: SubComponent }
 
 ];
 @NgModule({

@@ -1,15 +1,20 @@
 
 <div class="card bg-light">
-<!-- <div  *ngIf="mensagem == 1">
+ <div  *ngIf="mensagem == 1">
     <div class="alert alert-success" role="alert">
-        Salvo com sucesso!
+        Sucesso!
      </div>
   </div>
   <div  *ngIf="mensagem == 3">
     <div class="alert alert-danger" role="alert">
-       Erro de consistência!
+       Antes de inativar, transfere ou inative as dependências da equipe!
      </div>
-  </div> -->
+  </div>
+  <div  *ngIf="mensagem == 5">
+    <div class="alert alert-warning" role="alert">
+       Liderança inativa juntamente com sua equipe!
+     </div>
+  </div>
   
 <ul class="nav nav-tabs">
   <li class="nav-item">
@@ -22,6 +27,7 @@
     <span class="btn-link btn" routerLink="cadastrarLider">cadastrar</span>
   </li>
 </ul>
+<ng-template #lideres>
 <table class="table table-hover table-sm">
   <thead class="thead-dark">
     <tr>
@@ -74,7 +80,8 @@
   </ul>
   
 </nav>
-<div  *ngIf="lider == ''">
+</ng-template>
+<div  *ngIf="lider == ''; else lideres">
   <div class="alert alert-warning" role="alert">
      Sem dados a apresentar!
    </div>

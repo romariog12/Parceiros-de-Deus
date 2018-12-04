@@ -8,7 +8,6 @@ import * as $ from 'jquery';
 })
 export class AppComponent implements OnInit{
   ngOnInit(): void {
-   
-  }
+  }      
   title = 'app';
 }

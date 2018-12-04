@@ -30,21 +30,25 @@ export class EquipeComponent implements OnInit {
             this.equipesAtivas(0)
     }
     public excluirEquipe(id: number) {
+        let c = confirm("Tem certeza que deseja excluir definitivamente esta equipe?")
+        if (c) {
         this.service.excluirEquipe(id).subscribe(data => {
             this.mensagem = data;
             if (this.mensagem == 3) {
                 this.service.getEquipe(id).subscribe(data => {
                     this.getEquipe = data,
-                    this.equipe.splice(0, this.equipe.length)
+                        this.equipe.splice(0, this.equipe.length)
                     this.equipe.push(this.getEquipe)
-                    this.sequenciaPaginacao.splice(0,this.sequenciaPaginacao.length)
+                    this.sequenciaPaginacao.splice(0, this.sequenciaPaginacao.length)
                 })
-                
+
             }
             if (this.mensagem == 1) {
                 $("#equipe-" + id).hide(1000)
             }
         });
+    }
+    return false
     }
     public equipesInativas(page: number) {
         this.mensagem = 0
@@ -106,24 +110,29 @@ export class EquipeComponent implements OnInit {
     }
     public inativarEquipe(id: number) {
         this.mensagem = 0
-        this.service.inativarEquipe(id).subscribe(data => {
-            this.mensagem = data;
-            if (this.mensagem == 3) {
-                this.service.getEquipe(id).subscribe(data => {
-                    this.getEquipe = data
-                    for (let index = 0; index < this.getEquipe.subs.length; index++) {
-                        if(this.getEquipe.subs[index].status == -1)
-                            this.getEquipe.subs.splice(index)
-                    }
-                    this.equipe.splice(0, this.equipe.length)
-                    this.equipe.push(this.getEquipe)
-                    this.sequenciaPaginacao.splice(0,this.sequenciaPaginacao.length)
-                }) 
-            }
-            if (this.mensagem == 1) {
-                $("#equipe-" + id).hide(1000)
-            }
-        });
+        let c = confirm("Tem certeza que deseja inativar esta equipe?")
+        if (c) {
+            this.service.inativarEquipe(id).subscribe(data => {
+                this.mensagem = data;
+                if (this.mensagem == 3) {
+                    this.service.getEquipe(id).subscribe(data => {
+                        this.getEquipe = data
+                        for (let index = 0; index < this.getEquipe.subs.length; index++) {
+                            if (this.getEquipe.subs[index].status == -1)
+                                this.getEquipe.subs.splice(index)
+                        }
+                        this.equipe.splice(0, this.equipe.length)
+                        this.equipe.push(this.getEquipe)
+                        this.sequenciaPaginacao.splice(0, this.sequenciaPaginacao.length)
+                    })
+                }
+                if (this.mensagem == 1) {
+                    $("#equipe-" + id).hide(1000)
+                }
+            });
+        }
+        return false
+
     }
     public ativarEquipe(id: number) {
         this.mensagem = 0
@@ -137,14 +146,20 @@ export class EquipeComponent implements OnInit {
     }
 
     public excluirSub(id: number) {
-        this.service.excluirSub(id).subscribe($("#sub-" + id).hide(1000));
+        let c = confirm("Tem certeza que deseja excluir a sub-equipe?")
+        if(c)
+            this.service.excluirSub(id).subscribe($("#sub-" + id).hide(1000));
+        return false
     }
-    public inativarSub(id){
-        this.service.inativarSub(id).subscribe(data=>{
-          if(data == 1) {
-            $("#sub-"+id).hide(1000)
-          }
-        })
+    public inativarSub(id) {
+        let c = confirm("Tem certeza que deseja inativar a sub-equipe?")
+        if(c){
+            this.service.inativarSub(id).subscribe(data => {
+                if (data == 1) {
+                    $("#sub-" + id).hide(1000)
+                }
+            })
+        }
+        return false
     }
-
 }

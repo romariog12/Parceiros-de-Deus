@@ -24,6 +24,8 @@
             <button (click)="filtrar()" class="btn btn-outline-dark btn-sm">Filtrar</button>
           </div>
     </div>
+    
+   <button class="btn btn-link btn-sm">Aproveitamento %</button>
    </ol> 
     <ul class="nav nav-tabs">
       <div *ngIf="filtroMes == 0; else filtro" class="badge badge-sm badge-danger">
@@ -224,10 +226,12 @@
         <th>{{totalIndividual | number}}</th>
       </tr>
     </table>
-    <div *ngIf="ciclo > semana" class="mx-auto" style="width: 200px;">
+    <div *ngIf="ciclo > semana; else geraRelatorio" class="mx-auto" style="width: 200px;">
       <img routerLink="lancarPd/{{pd.equipe.idEquipe}}" src="../../assets/anigif.gif" />
     </div>
-    <button *ngIf="relatorio == false" class="btn btn-warning btn-sm " (click)="restartarRelatorio()">Gerar Novo Relatório</button>
-  
+    <ng-template #geraRelatorio>
+      <button *ngIf="relatorio == false" class="btn btn-warning btn-sm " (click)="restartarRelatorio()">Gerar Novo Relatório</button>
+    </ng-template>
+    
 <br></div>
 </div>

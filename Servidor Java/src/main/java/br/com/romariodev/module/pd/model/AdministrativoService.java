@@ -35,7 +35,7 @@ public class AdministrativoService extends AbstractService {
 			for (Equipe e : equipe) {
 				Pd pd = new Pd();
 				Lider lider = e.getLider();
-				if (lider.getLiderCelula() == 1) {
+				if (lider.getLiderCelula() == 1 && lider.getStatus() == 1) {
 					pd.setCelula(0.00f);
 					pd.setIndividual(0.00f);
 					pd.setData(data);
@@ -45,18 +45,8 @@ public class AdministrativoService extends AbstractService {
 					this.pdRepository.save(pd);
 				}
 				if (!e.getSubs().isEmpty()) {
-					Iterable<Sub> subs = e.getSubs();
-					for (Sub sub : subs) {
-						Pd pdSub = new Pd();
-						Lider liderSub = sub.getLider();
-						pdSub.setCelula(0.00f);
-						pdSub.setIndividual(0.00f);
-						pdSub.setData(data);
-						pdSub.setEquipe(e);
-						pdSub.setLider(liderSub);
-						pdSub.setSemana(semana);
-						this.pdRepository.save(pdSub);
-					}
+					List<Sub> subs = e.getSubs();
+					LancarPdSub(subs, data, semana, e);
 				}
 			}
 			return CodigoMensagem.SUCESSO;
@@ -64,16 +54,17 @@ public class AdministrativoService extends AbstractService {
 			return CodigoMensagem.ERRO;
 		}
 	}
+
 	public int restartarRelatorio(int semana, int mes, int ano) {
 		if (mes == 0) {
 			Calendar data = Calendar.getInstance();
 			mes = data.get(Calendar.MONTH) + 1;
 			ano = data.get(Calendar.YEAR);
 		}
-		 List<Pd> pd = this.pdRepository.listaPd(semana, mes, ano);
-		 this.pdRepository.deleteAll(pd);
-		 this.novoRelatorio(semana, mes, ano);
-		 return CodigoMensagem.SUCESSO;
+		List<Pd> pd = this.pdRepository.listaPd(semana, mes, ano);
+		this.pdRepository.deleteAll(pd);
+		this.novoRelatorio(semana, mes, ano);
+		return CodigoMensagem.SUCESSO;
 	}
 
 	public int excluirLancamentoPd(int id) {
@@ -125,9 +116,10 @@ public class AdministrativoService extends AbstractService {
 	public int inativarSub(int id) {
 		try {
 			Sub sub = this.subRepository.findByIdSub(id);
-			if (!sub.getSubs().isEmpty()){
-				for (Sub s: sub.getSubs()) {
-					if(s.getStatus() == 1);
+			if (!sub.getSubs().isEmpty()) {
+				for (Sub s : sub.getSubs()) {
+					if (s.getStatus() == 1)
+						;
 					return CodigoMensagem.ERRO_CONSISTENCIA;
 				}
 			}
@@ -204,18 +196,10 @@ public class AdministrativoService extends AbstractService {
 	}
 
 	public int excluirLider(int id) {
-
 		Lider lider = this.liderRepository.findByIdlider(id);
 		Equipe equipe = this.equipeRepository.findByLiderIdlider(id);
-		Sub sub = this.subRepository.findByLiderIdlider(id);
 		if (equipe != null) {
 			return CodigoMensagem.ERRO_CONSISTENCIA;
-		}
-		if (!sub.getSubs().isEmpty()) {
-			return CodigoMensagem.ERRO_CONSISTENCIA;
-		}
-		if (lider.getConjugue() != null) {
-			lider.getConjugue().setConjugue(null);
 		}
 		List<Pd> pd = this.pdRepository.findByLiderIdlider(id);
 		if (!pd.isEmpty())
@@ -228,10 +212,10 @@ public class AdministrativoService extends AbstractService {
 		try {
 			Lider lider = this.liderRepository.findByIdlider(id);
 			Equipe equipe = equipeRepository.findByLiderIdlider(id);
-			if(equipe != null){
-				if(inativarEquipe(equipe.getIdEquipe()) == CodigoMensagem.ERRO_CONSISTENCIA)
+			if (equipe != null) {
+				if (inativarEquipe(equipe.getIdEquipe()) == CodigoMensagem.ERRO_CONSISTENCIA)
 					return CodigoMensagem.ERRO_CONSISTENCIA;
-				
+
 				lider.setStatus(-1);
 				this.liderRepository.save(lider);
 				return CodigoMensagem.SUCESSO_DEPENDENCIAS;
@@ -262,7 +246,7 @@ public class AdministrativoService extends AbstractService {
 			Equipe equipe = this.equipeRepository.findByIdEquipe(id);
 			if (!equipe.getSubs().isEmpty()) {
 				for (Sub sub : equipe.getSubs()) {
-					if(sub.getStatus() == 1)
+					if (sub.getStatus() == 1)
 						return CodigoMensagem.ERRO_CONSISTENCIA;
 				}
 			}
@@ -286,4 +270,24 @@ public class AdministrativoService extends AbstractService {
 		}
 	}
 
+	public void LancarPdSub(List<Sub> subs, Calendar data, int semana, Equipe e) {
+		for (Sub s : subs) {
+			if (!s.getSubs().isEmpty()) {
+				List<Sub> subs144 = s.getSubs();
+				LancarPdSub(subs144, data, semana, e);
+			}
+			Pd pdSub = new Pd();
+			Lider liderSub = s.getLider();
+			if (liderSub.getStatus() == 1) {
+				pdSub.setCelula(0.00f);
+				pdSub.setIndividual(0.00f);
+				pdSub.setData(data);
+				pdSub.setEquipe(e);
+				pdSub.setLider(liderSub);
+				pdSub.setSemana(semana);
+				this.pdRepository.save(pdSub);
+			}
+		}
+
+	}
 }

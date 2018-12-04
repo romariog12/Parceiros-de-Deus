@@ -19,13 +19,14 @@ const routes: Routes = [
   { path: 'lideres/cadastrarLider', component: CadastrarLiderComponent },
   { path: 'equipes/lancarPd/:id', component: LancarPdComponent },
   { path: 'listaPd/lancarPd/:id/:ciclo/:mes/:ano', component: LancarPdComponent },
-  { path: 'equipes/cadastrarSub', component: SubComponent },
+  { path: 'equipes/editarSub/:idEquipe/:id', component: SubComponent },
+  { path: 'equipes/perfil/:idEquipe/cadastrarSub', component: SubComponent },
   { path: 'listaPd', component: RelatorioComponent },
-  { path: 'equipes/perfil/:id/:page', component: PerfilComponent },
+  { path: 'equipes/perfil/:id', component: PerfilComponent },
   { path: 'administracao', component: AdministracaoComponent },
   { path: 'editarLider/:id', component: editarLider },
   { path: 'editarEquipe/:id', component: CadastrarEquipeComponent },
-  { path: 'editarSub/:id', component: SubComponent }
+  { path: 'editarSub/:idEquipe/:id', component: SubComponent }
 
 ];
 @NgModule({

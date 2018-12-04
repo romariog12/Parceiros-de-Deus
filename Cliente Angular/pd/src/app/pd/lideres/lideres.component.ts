@@ -16,7 +16,7 @@ export class LideresComponent implements OnInit {
   public totalPagina;
   public numeroPagina;
   public paginacao = [];
-  public  totalElementos;
+  public totalElementos;
   public anterior: number = 88888;
   public proximo: number = 99999;
   constructor(private service: PdService) { }
@@ -38,7 +38,7 @@ export class LideresComponent implements OnInit {
         this.lider = this.paginacaoLideres['content'],
         this.totalPagina = this.paginacaoLideres['totalPages'],
         this.numeroPagina = this.paginacaoLideres['number'];
-        this.totalElementos = this.paginacaoLideres['totalElements']
+      this.totalElementos = this.paginacaoLideres['totalElements']
       let p = []
       for (let index = 0; index < this.totalPagina; index++) {
         p[index] = index
@@ -56,17 +56,15 @@ export class LideresComponent implements OnInit {
 
   }
   public lideresAtivos(page: number) {
-    this.anterior = 88888
-    this.proximo = 99999
     this.acao = "ativos"
     $("#abaLideresAtivos").addClass(this.abaAtiva)
     $("#abaLideresInativos").removeClass(this.abaAtiva)
     this.service.listaLider(page).subscribe(data => {
       this.paginacaoLideres = data
-        this.lider = this.paginacaoLideres['content']
-        this.totalPagina = this.paginacaoLideres['totalPages']
-        this.numeroPagina = this.paginacaoLideres['number']
-        this.totalElementos = this.paginacaoLideres['totalElements']
+      this.lider = this.paginacaoLideres['content']
+      this.totalPagina = this.paginacaoLideres['totalPages']
+      this.numeroPagina = this.paginacaoLideres['number']
+      this.totalElementos = this.paginacaoLideres['totalElements']
       let p = []
       for (let index = 0; index < this.totalPagina; index++) {
         p[index] = index
@@ -80,9 +78,13 @@ export class LideresComponent implements OnInit {
       }
       $(".page-item").removeClass("active")
       $("#page-" + this.numeroPagina).addClass("active")
+      this.anterior = 88888
+      this.proximo = 99999
     });
   }
   public inativarLider(id: number) {
+    let c = confirm("Tem certeza que deseja inativar este líder?")
+    if (c) {
     return this.service.inativarLider(id).subscribe(
       data => {
         this.mensagem = data;
@@ -90,25 +92,38 @@ export class LideresComponent implements OnInit {
           $("#lider-" + id).hide(1000)
         }
       })
+    }
+    else
+      return false
   }
+
   public ativarLider(id: number) {
-    return this.service.ativarLider(id).subscribe(
-      data => {
-        this.mensagem = data;
-        if (this.mensagem == 1) {
-          $("#lider-" + id).hide(1000)
-        }
-      })
+    let c = confirm("Tem certeza que deseja ativar este líder?")
+    if (c) {
+      return this.service.ativarLider(id).subscribe(
+        data => {
+          this.mensagem = data;
+          if (this.mensagem == 1) {
+            $("#lider-" + id).hide(1000)
+          }
+        })
+    }
+    else
+      return false
   }
   public excluirLider(id: number) {
-    return this.service.excluirLider(id).subscribe(
-      data => {
-        this.mensagem = data;
-        console.log(this.mensagem);
-
-        if (this.mensagem == 1) {
-          $("#lider-" + id).hide(1000)
-        }
-      })
+    let c = confirm("Tem certeza que deseja excluir definitivamente este líder?")
+    if(c){
+      return this.service.excluirLider(id).subscribe(
+        data => {
+          this.mensagem = data;
+          console.log(this.mensagem);
+  
+          if (this.mensagem == 1) {
+            $("#lider-" + id).hide(1000)
+          }
+        })
+    }
+   return false;
   }
 }

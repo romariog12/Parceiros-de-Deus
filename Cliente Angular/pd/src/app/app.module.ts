@@ -43,7 +43,7 @@ import { EditarEquipeComponent } from './pd/equipe/editar-equipe.component';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
   ],
   providers: [PdService, RelatorioComponent],
   bootstrap: [AppComponent, EquipeComponent]

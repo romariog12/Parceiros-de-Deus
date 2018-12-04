@@ -1,6 +1,9 @@
-<p>
-  {{perfil.equipe.nome}}
-</p>
+<div class="card bg-light">
+  <div class="card-body">
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a routerLink="/equipes">Equipes</a></li>
+  <li class="breadcrumb-item active" aria-current="page">{{perfil.equipe.nome}} - {{perfil.equipe.lider.nome}} <span *ngIf="perfil.equipe.status == -1" class="badge badge-warning">Inativo</span></li>
+</ol>
 <ul class="nav nav-tabs">
   <li class="nav-item">
     <a class="nav-link btn {{abaAtiva}}" id="abaSubsAtivas"  (click)="subsAtivas(0)"><span *ngIf="acao == 'ativos'" class="badge badge-warning">{{paginacao.totalElementos}}</span>Sub Equipes</a>
@@ -9,11 +12,11 @@
     <a class="nav-link btn" id="abaSubsInativas" (click)="subsInativas(0)"><span *ngIf="acao == 'inativos'" class="badge badge-warning">{{paginacao.totalElementos}}</span> Inativos</a>
   </li>
   <li class="nav-item">
-    <span class="btn-link btn" routerLink="perfil/cadastrarSub">cadastrar</span>
+    <span class="btn-link btn" routerLink="cadastrarSub">cadastrar sub</span>
   </li>
 </ul>
 <div *ngIf="acao == 'ativos'">
-<div *ngIf="perfil.subs == '';else subs" class="alert alert-warning" role="alert">
+<div *ngIf="perfil.subs == ''" class="alert alert-warning" role="alert">
     Nenhuma sub cadastrada!
  </div>
     <table class="table table-sm">
@@ -26,13 +29,13 @@
           </tr>
         </thead>
         <tbody *ngFor="let subs of perfil.subs.content"  >
-          <tr  id="sub-{{subs.idsub}}">
+          <tr  *ngIf="subs.status == 1" id="sub-{{subs.idSub}}">
             <td class="bg-warning"></td>
             <td><span class="btn btn-link">{{subs.nome}}</span></td>
             <td><span class="btn btn-link">{{subs.lider.nome}}<span *ngIf="subs.lider.conjugue"> e {{subs.lider.conjugue.nome}}</span></span></td>
             <td >
               <button  class="btn btn-outline-warning btn-sm"(click)="inativarSub(subs.idSub)">Inativar</button>
-              <button  class="btn btn-outline-primary btn-sm" routerLink="/editarSub/{{subs.idSub}}">Editar</button>
+              <button  class="btn btn-outline-primary btn-sm" routerLink="/editarSub/{{perfil.equipe.idEquipe}}/{{subs.idSub}}">Editar</button>
             </td>
             
           </tr>
@@ -49,8 +52,8 @@
             <th>Ação</th>
           </tr>
         </thead>
-        <tbody *ngFor="let subs of perfil.equipe.subs.content"  >
-          <tr *ngIf="subs.status == -1" id="sub-{{subs.idsub}}">
+        <tbody *ngFor="let subs of perfil.subs.content"  >
+          <tr *ngIf="subs.status == -1" id="sub-{{subs.idSub}}">
             <td class="bg-warning"></td>
             <td><span class="btn btn-link">{{subs.nome}}</span></td>
             <td><span class="btn btn-link">{{subs.lider.nome}}<span *ngIf="subs.lider.conjugue"> e {{subs.lider.conjugue.nome}}</span></span></td>
@@ -61,4 +64,31 @@
           </tr>
         </tbody>
         </table>
+ </div>
+ <nav  class="justify-content-center d-flex">
+  <ul class="pagination" *ngIf="sequenciaPaginacao != ''">
+    <li  class="page-item" id="anterior">
+      <a  *ngIf="acao == 'ativos'"class="page-link"  (click)="equipesAtivas(paginacao.anterior)">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+      <a  *ngIf="acao == 'inativos'"class="page-link" (click)="equipesInativas(paginacao.anterior)">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <span *ngFor="let pag  of sequenciaPaginacao; let i = index">
+      <li  *ngIf="acao == 'ativos'" id="page-{{i}}" class="page-item btn-link "><a class="page-link" (click)="equipesAtivas(i)">{{i+1}}</a></li>
+      <li *ngIf="acao == 'inativos'" id="page-{{i}}" class="page-item btn-link "><a class="page-link" (click)="equipesInativas(i)">{{i+1}}</a></li>
+    </span>
+    <li class="page-item" id="proximo">
+      <a  *ngIf="acao == 'ativos'"class="page-link" (click)="equipesAtivas(paginacao.proximo)">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+      <a  *ngIf="acao == 'inativos'"class="page-link" (click)="equipesInativas(paginacao.proximo)">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+  
+</nav>
+</div>
  </div>

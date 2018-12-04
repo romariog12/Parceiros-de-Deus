@@ -15,7 +15,7 @@ export class RelatorioComponent implements OnInit {
   public pdMensal: Pd[]
   public ciclo
   public semana
-  public data
+  public data = new Date
   public count: number
   public individualSuccess
   public lancar

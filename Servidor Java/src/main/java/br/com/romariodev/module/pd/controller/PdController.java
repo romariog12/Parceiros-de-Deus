@@ -25,7 +25,6 @@ import br.com.romariodev.module.pd.entity.Sub;
 import br.com.romariodev.module.pd.model.AdministrativoService;
 import br.com.romariodev.module.pd.model.PdService;
 import br.com.romariodev.module.pd.model.Perfil;
-import br.com.romariodev.module.pd.util.CodigoMensagem;
 import br.com.romariodev.module.pd.util.Utilitarios;
 
 @RestController
@@ -37,15 +36,9 @@ public class PdController extends AbstractController {
 	private AdministrativoService admService;
 
 	@PostMapping("/cadastrarlider")
-	public @ResponseBody String cadastratLider(@RequestBody Lider lider) {
-		if (this.admService.cadastrarlider(lider) == CodigoMensagem.SUCESSO) {
-			return "Cadastro realizado com sucesso!";
-		} else if (this.admService.cadastrarlider(lider) == CodigoMensagem.CADASTRO_EXISTENTE) {
-			return "Cadastro existente";
-		} else {
-			return "Cadastro não realizado! erro interno! \n Código:["
-					+ this.admService.cadastrarlider(lider) + "]";
-		}
+	public @ResponseBody int cadastratLider(@RequestBody Lider lider) {
+		lider.setStatus(1);
+		return this.admService.cadastrarlider(lider);
 	}
 	@PostMapping("/editarlider")
 	public @ResponseBody int editarLider(@RequestBody Lider lider) { 
@@ -54,6 +47,7 @@ public class PdController extends AbstractController {
 
 	@PostMapping(path = "/cadastrarEquipe")
 	public @ResponseBody int cadastrarEquipe(@RequestBody Equipe equipe) {
+		equipe.setStatus(1);
 		return this.admService.cadastrarEquipe(equipe);
 
 	}
@@ -93,8 +87,8 @@ public class PdController extends AbstractController {
 		return this.pdService.equipe(id);
 	}
 
-	@PostMapping(path = "/excluirSub")
-	public @ResponseBody int excluirSub(@RequestBody int id) {
+	@GetMapping(path = "/excluirSub/{id}")
+	public @ResponseBody int excluirSub(@PathVariable int id) {
 		return this.admService.excluirSub(id);
 	}
 	@GetMapping(path = "/sub/{id}")

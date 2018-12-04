@@ -18,11 +18,30 @@ export class SubComponent implements OnInit {
   public equipe: Equipe[];
   public lider: Lider[];
   public mensagem;
+  public crumb;
+  public e :Equipe
+  public acao = "cadastrar"
+  public id = null
+  public idEquipe = null
   ngOnInit() {
-    const id = +this.route.snapshot.paramMap.get('id')
-    if(id){
-      this.service.sub(id).subscribe(data=>{
+    this.id = +this.route.snapshot.paramMap.get('id')
+    this.idEquipe = +this.route.snapshot.paramMap.get('idEquipe')
+    if(!this.id){
+      this.acao = "cadastrar"
+      this.service.getEquipe(this.idEquipe).subscribe(data=>{
+        this.e = data
+        this.sub.equipe = this.e
+        this.crumb = "Cadastrar Sub"
+      })
+    }
+    else{
+      this.acao = "editar"
+      this.service.sub(this.id).subscribe(data=>{
         this.sub = data
+        this.crumb = "Editar Sub-Equipe"
+      })
+      this.service.getEquipe(this.idEquipe).subscribe(data=>{
+        this.e = data
       })
     }
     this.service.equipes().subscribe(data =>{this.equipe = data})

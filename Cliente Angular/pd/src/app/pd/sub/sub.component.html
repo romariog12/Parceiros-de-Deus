@@ -2,8 +2,14 @@
   <div class="card-body">
       <ol class="breadcrumb">
           <li class="breadcrumb-item"><a routerLink="/equipes">Equipes</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Transferir Sub Equipe</li>
+          <li class="breadcrumb-item"><a routerLink="/equipes/perfil/{{e.idEquipe}}">{{e.nome}} - {{e.lider.nome}}</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{crumb}}</li>
         </ol>
+        <div  *ngIf="mensagem == 1">
+            <div class="alert alert-success" role="alert">
+                Salvo com sucesso!
+             </div>
+          </div>
       <table  class="table table-hover table-sm">
           <thead>
               <tr class="thead-dark">
@@ -23,9 +29,14 @@
                   </select>
                 </td>
                 <td>
-                  <select   [(ngModel)]="sub.equipe"  class="form-control "name="equipe">
-                    <option *ngFor="let e of equipe" [ngValue]="e">{{e.nome}}</option>
-                  </select>
+                  <div *ngIf="acao == 'editar'">
+                      <select  [(ngModel)]="sub.equipe"  class="form-control "name="equipe">
+                          <option *ngFor="let e of equipe" [ngValue]="e">{{e.nome}}</option>
+                        </select>
+                  </div>
+                  <div *ngIf="acao == 'cadastrar'">
+                    <input disabled  class="form-control " value="{{e.nome}}"/>
+                  </div>
                 </td>
                 <td><button class="btn btn-primary" (click)="cadastrarSub()">Salvar</button></td>
               </tr>

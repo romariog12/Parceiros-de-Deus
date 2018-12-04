@@ -27,20 +27,29 @@ export class PerfilComponent implements OnInit {
     this.service.perfil(idEquipe, 0).subscribe(data => { this.perfil = data })
   }
   public inativarSub(id) {
-    this.service.inativarSub(id).subscribe(data => {
-    this.mensagem = data;
-      if (this.mensagem == 1) {
-        $("#sub-" + id).hide(1000)
-      }
-    })
+    let c = confirm("Tem certeza que deseja inativar a sub-equipe?")
+    if(c){
+      this.service.inativarSub(id).subscribe(data => {
+        this.mensagem = data
+        if (this.mensagem == 1) {
+          $("#sub-"+id).hide(1000)
+        }})
+    }
+    else 
+      return false    
   }
   public ativarSub(id) {
-    this.service.ativarSub(id).subscribe(data => {
-    this.mensagem = data;
+    let c = confirm("Tem certeza que deseja ativar a sub-equipe?")
+    if(c){
+      this.service.ativarSub(id).subscribe(data => {
+      this.mensagem = data
       if (this.mensagem == 1) {
-        $("#sub-" + id).hide(1000)
+        $("#sub-"+id).hide(1000)
       }
-    })
+      })
+    }
+    else
+      return false;
   }
   public sub() {
     $(".nav-link").removeClass("active");
@@ -110,6 +119,18 @@ export class PerfilComponent implements OnInit {
         $(".page-item").removeClass("active")
         $("#page-" + this.paginacao.numeroPagina).addClass("active")
     });
+}
+public excluirSub(id:number){
+  let c = confirm("Tem certeza que deseja excluir a Sub-Equipe?")
+  if(c){
+    this.service.excluirSub(id).subscribe(data=>{
+      this.mensagem = data
+      if (this.mensagem == 1) {
+        $("#sub-"+id).hide(1000)
+      }
+    })
+  }
+  return false
 }
 
 

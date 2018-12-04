@@ -105,7 +105,7 @@ export class PdService {
     return this.http.get(httpUrl+'pd/ativarLider/'+id)
   }
   public excluirSub(id){
-    return this.http.post(httpUrl+'pd/excluirSub',id)
+    return this.http.get(httpUrl+'pd/excluirSub/'+id)
   }
   public inativarSub(id){
     return this.http.get(httpUrl+'pd/inativarSub/'+id)

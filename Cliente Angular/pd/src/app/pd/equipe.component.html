@@ -32,7 +32,7 @@
     </thead>
 <tbody *ngFor="let equipe of equipe" >
   <tr class="" id="equipe-{{equipe.idEquipe}}">
-    <td><span routerLink="perfil/{{equipe.idEquipe}}/0"class="btn btn-link">{{equipe.nome}}</span></td>
+    <td><span routerLink="perfil/{{equipe.idEquipe}}"class="btn btn-link">{{equipe.nome}}</span></td>
     <td><span class="btn btn-link">{{equipe.lider.nome}}</span></td>
     <td >
       <span *ngIf="acao == 'ativos'">
@@ -98,7 +98,7 @@
         <td>{{subs.lider.nome}}</td>
         <td *ngIf="subs.status == 1">
           <button  class="btn btn-warning btn-sm" (click)="inativarSub(subs.idSub)">Inativar</button>
-          <button  class="btn btn-primary btn-sm" routerLink="/editarSub/{{subs.idSub}}">Transferir</button>
+          <button  class="btn btn-primary btn-sm" routerLink="editarSub/{{getEquipe.idEquipe}}/{{subs.idSub}}">Transferir</button>
         </td>
       </tr>
     </tbody>
@@ -121,7 +121,7 @@
         <td>{{subs.nome}}</td>
         <td>{{subs.lider.nome}}</td>
         <td *ngIf="subs.status == -1 ">
-          <button  class="btn btn-success btn-sm" routerLink="/editarSub/{{subs.idSub}}">Ativar e transferir</button>
+          <button  class="btn btn-success btn-sm" routerLink="editarSub/{{ getEquipe.idEquipe}}/{{subs.idSub}}">Ativar e transferir</button>
           <button  class="btn btn-danger btn-sm" (clik)="excluirSub(subs.idSub)">Excluir definitivamente</button>
         </td>
       </tr>

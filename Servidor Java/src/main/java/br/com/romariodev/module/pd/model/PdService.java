@@ -1,6 +1,9 @@
 package br.com.romariodev.module.pd.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -8,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import br.com.romariodev.module.pd.entity.Equipe;
-import br.com.romariodev.module.pd.entity.Lider;
 import br.com.romariodev.module.pd.entity.Pd;
 import br.com.romariodev.module.pd.entity.Sub;
 import br.com.romariodev.module.pd.repository.EquipeRepository;
@@ -40,6 +42,10 @@ public class PdService extends AbstractService {
 	}
 
 	public List<Pd> listaPdCelula(int semana, int mes, int ano) {
+		if (semana == 0) {
+			DateFormat df = new SimpleDateFormat("W");
+			semana = Integer.parseInt(df.format(new Date()));
+		}
 		if (mes == 0) {
 			Calendar data = Calendar.getInstance();
 			mes = data.get(Calendar.MONTH) + 1;

@@ -43,12 +43,12 @@
       <td>{{lider.hierarquia}}</td>
       <td>
         <span *ngIf="acao == 'ativos'">
-          <button (click)="inativarLider(lider.idlider)" class="btn btn-outline-warning btn-sm ">Inativar</button>
+          <button (click)="inativarLider(lider)" class="btn btn-outline-warning btn-sm ">Inativar</button>
           <button  routerLink="/editarLider/{{lider.idlider}}"class="btn btn-outline-primary btn-sm ">Editar</button>
         
         </span>
         <span *ngIf="acao == 'inativos'">
-            <button (click)="ativarLider(lider.idlider)" class="btn btn-outline-success btn-sm ">Ativar</button>
+            <button (click)="ativarLider(lider)" class="btn btn-outline-success btn-sm ">Ativar</button>
             <button  routerLink="/editarLider/{{lider.idlider}}"class="btn btn-outline-primary btn-sm ">Editar</button>
             <button (click)="excluirLider(lider.idlider)" class="btn btn-outline-danger btn-sm">Excluir definitivamente</button>
         </span>

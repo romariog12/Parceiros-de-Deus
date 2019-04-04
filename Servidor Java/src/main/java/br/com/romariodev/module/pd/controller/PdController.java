@@ -9,9 +9,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,7 +42,7 @@ public class PdController extends AbstractController {
 		lider.setStatus(1);
 		return this.admService.cadastrarlider(lider);
 	}
-	@PostMapping("/editarlider")
+	@PutMapping("/editarlider")
 	public @ResponseBody int editarLider(@RequestBody Lider lider) { 
 			return this.admService.editarlider(lider);
 	}
@@ -51,35 +53,35 @@ public class PdController extends AbstractController {
 		return this.admService.cadastrarEquipe(equipe);
 
 	}
-	@PostMapping(path = "/editarEquipe")
+	@PutMapping(path = "/editarEquipe")
 	public @ResponseBody int editarEquipe(@RequestBody Equipe equipe) {
 		return this.admService.editarEquipe(equipe);
 
 	}
 
-	@PostMapping(path = "/excluirEquipe")
-	public @ResponseBody int excluirEquipe(@RequestBody int id) {
+	@DeleteMapping(path = "/excluirEquipe/{id}")
+	public @ResponseBody int excluirEquipe(@PathVariable int id) {
 		return this.admService.excluirEquipe(id);
 	}
 
-	@GetMapping(path = "inativarEquipe/{id}")
-	public @ResponseBody int inativarEquipe(@PathVariable int id) {
-		return this.admService.inativarEquipe(id);
+	@PutMapping(path = "inativarEquipe")
+	public @ResponseBody int inativarEquipe(@RequestBody Equipe equipe) {
+		return this.admService.inativarEquipe(equipe);
 	}
 
-	@GetMapping(path = "ativarEquipe/{id}")
-	public @ResponseBody int ativarEquipe(@PathVariable int id) {
-		return this.admService.ativarEquipe(id);
+	@PutMapping(path = "ativarEquipe")
+	public @ResponseBody int ativarEquipe(@RequestBody Equipe equipe) {
+		return this.admService.ativarEquipe(equipe);
 	}
 
-	@GetMapping(path = "ativarLider/{id}")
-	public @ResponseBody int ativarLider(@PathVariable int id) {
-		return this.admService.ativarLider(id);
+	@PutMapping(path = "ativarLider")
+	public @ResponseBody int ativarLider(@RequestBody Lider lider) {
+		return this.admService.ativarLider(lider);
 	}
 
-	@GetMapping(path = "inativarLider/{id}")
-	public @ResponseBody int inativarLider(@PathVariable int id) {
-		return this.admService.inativarLider(id);
+	@PutMapping(path = "inativarLider")
+	public @ResponseBody int inativarLider(@RequestBody Lider lider) {
+		return this.admService.inativarLider(lider);
 	}
 
 	@GetMapping(path = "getEquipe/{id}")
@@ -87,7 +89,7 @@ public class PdController extends AbstractController {
 		return this.pdService.equipe(id);
 	}
 
-	@GetMapping(path = "/excluirSub/{id}")
+	@DeleteMapping(path = "/excluirSub/{id}")
 	public @ResponseBody int excluirSub(@PathVariable int id) {
 		return this.admService.excluirSub(id);
 	}
@@ -95,23 +97,23 @@ public class PdController extends AbstractController {
 	public @ResponseBody Sub sub(@PathVariable int id) {
 		return this.pdService.sub(id);
 	}
-	@GetMapping(path = "/excluirLider/{id}")
+	@DeleteMapping(path = "/excluirLider/{id}")
 	public @ResponseBody int excluirLider(@PathVariable int id) {
 		return this.admService.excluirLider(id);
 	}
-	@GetMapping(path = "/inativarSub/{id}")
-	public @ResponseBody int inativarSub(@PathVariable int id) {
+	@PutMapping(path = "/inativarSub")
+	public @ResponseBody int inativarSub(@RequestBody Sub sub) {
 		System.out.println("Teste");
-		return this.admService.inativarSub(id);
+		return this.admService.inativarSub(sub);
 	}
 
-	@PostMapping(path = "/ativarSub")
-	public @ResponseBody int ativarSub(@RequestBody int id) {
-		return this.admService.ativarSub(id);
+	@PutMapping(path = "/ativarSub")
+	public @ResponseBody int ativarSub(@RequestBody Sub sub) {
+		return this.admService.ativarSub(sub);
 	}
 
-	@PostMapping(path = "/excluirLancamentoPd")
-	public @ResponseBody int excluirLancamentoPd(@RequestBody int id) {
+	@DeleteMapping(path = "/excluirLancamentoPd/{id}")
+	public @ResponseBody int excluirLancamentoPd(@PathVariable int id) {
 		return this.admService.excluirLancamentoPd(id);
 	}
 
@@ -123,10 +125,6 @@ public class PdController extends AbstractController {
 	@GetMapping(path = "/listaPdCelula/{semana}/{mes}/{ano}")
 	public @ResponseBody List<Pd> listaPd(@PathVariable int semana,
 			@PathVariable int mes, @PathVariable int ano) {
-		if (semana == 0) {
-			DateFormat df = new SimpleDateFormat("W");
-			semana = Integer.parseInt(df.format(new Date()));
-		}
 		return this.pdService.listaPdCelula(semana, mes, ano);
 	}
 	@GetMapping(path = "/restartarRelatorio/{semana}/{mes}/{ano}")
@@ -139,8 +137,8 @@ public class PdController extends AbstractController {
 		return this.admService.restartarRelatorio(semana, mes, ano);
 	}
 
-	@PostMapping(path = "/listaPdCompleto")
-	public @ResponseBody List<Pd> listaPdCompleto(@RequestBody int semana) {
+	@GetMapping(path = "/listaPdCompleto/{id}")
+	public @ResponseBody List<Pd> listaPdCompleto(@PathVariable int semana) {
 		if (semana == 0) {
 			DateFormat df = new SimpleDateFormat("W");
 			semana = Integer.parseInt(df.format(new Date()));
@@ -247,7 +245,7 @@ public class PdController extends AbstractController {
 	public @ResponseBody int cadastrarSub(@RequestBody Sub sub) {
 		return this.admService.cadastrarSub(sub);
 	}
-	@PostMapping(path = "/editarSub")
+	@PutMapping(path = "/editarSub")
 	public @ResponseBody int editarSub(@RequestBody Sub sub) {
 		return this.admService.editarSub(sub);
 	}

@@ -82,14 +82,14 @@ export class LideresComponent implements OnInit {
       this.proximo = 99999
     });
   }
-  public inativarLider(id: number) {
+  public inativarLider(lider: Lider) {
     let c = confirm("Tem certeza que deseja inativar este líder?")
     if (c) {
-    return this.service.inativarLider(id).subscribe(
+    return this.service.inativarLider(lider).subscribe(
       data => {
         this.mensagem = data;
         if (this.mensagem == 1 || this.mensagem == 5) {
-          $("#lider-" + id).hide(1000)
+          $("#lider-"+lider.idLider).hide(1000)
         }
       })
     }
@@ -97,14 +97,14 @@ export class LideresComponent implements OnInit {
       return false
   }
 
-  public ativarLider(id: number) {
+  public ativarLider(lider:Lider) {
     let c = confirm("Tem certeza que deseja ativar este líder?")
     if (c) {
-      return this.service.ativarLider(id).subscribe(
+      return this.service.ativarLider(lider).subscribe(
         data => {
           this.mensagem = data;
           if (this.mensagem == 1) {
-            $("#lider-" + id).hide(1000)
+            $("#lider-"+lider.idLider).hide(1000)
           }
         })
     }

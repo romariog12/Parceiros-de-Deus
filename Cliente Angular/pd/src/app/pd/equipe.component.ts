@@ -108,14 +108,14 @@ export class EquipeComponent implements OnInit {
             $("#page-" + this.paginacao.numeroPagina).addClass("active")
         });
     }
-    public inativarEquipe(id: number) {
+    public inativarEquipe(equipe: Equipe) {
         this.mensagem = 0
         let c = confirm("Tem certeza que deseja inativar esta equipe?")
         if (c) {
-            this.service.inativarEquipe(id).subscribe(data => {
+            this.service.inativarEquipe(equipe).subscribe(data => {
                 this.mensagem = data;
                 if (this.mensagem == 3) {
-                    this.service.getEquipe(id).subscribe(data => {
+                    this.service.getEquipe(equipe.idEquipe).subscribe(data => {
                         this.getEquipe = data
                         for (let index = 0; index < this.getEquipe.subs.length; index++) {
                             if (this.getEquipe.subs[index].status == -1)
@@ -127,19 +127,19 @@ export class EquipeComponent implements OnInit {
                     })
                 }
                 if (this.mensagem == 1) {
-                    $("#equipe-" + id).hide(1000)
+                    $("#equipe-" + equipe.idEquipe).hide(1000)
                 }
             });
         }
         return false
 
     }
-    public ativarEquipe(id: number) {
+    public ativarEquipe(equipe: Equipe) {
         this.mensagem = 0
-        this.service.ativarEquipe(id).subscribe(data => {
+        this.service.ativarEquipe(equipe).subscribe(data => {
             this.mensagem = data;
             if (this.mensagem == 1) {
-                $("#equipe-" + id).hide(1000)
+                $("#equipe-" + equipe.idEquipe).hide(1000)
             }
         });
 
@@ -151,12 +151,12 @@ export class EquipeComponent implements OnInit {
             this.service.excluirSub(id).subscribe($("#sub-" + id).hide(1000));
         return false
     }
-    public inativarSub(id) {
+    public inativarSub(sub:Sub) {
         let c = confirm("Tem certeza que deseja inativar a sub-equipe?")
         if(c){
-            this.service.inativarSub(id).subscribe(data => {
+            this.service.inativarSub(sub).subscribe(data => {
                 if (data == 1) {
-                    $("#sub-" + id).hide(1000)
+                    $("#sub-" + sub.idSub).hide(1000)
                 }
             })
         }

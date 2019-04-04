@@ -26,25 +26,25 @@ export class PerfilComponent implements OnInit {
     const idEquipe = +this.route.snapshot.paramMap.get('id')
     this.service.perfil(idEquipe, 0).subscribe(data => { this.perfil = data })
   }
-  public inativarSub(id) {
+  public inativarSub(sub: Sub) {
     let c = confirm("Tem certeza que deseja inativar a sub-equipe?")
     if(c){
-      this.service.inativarSub(id).subscribe(data => {
+      this.service.inativarSub(sub).subscribe(data => {
         this.mensagem = data
         if (this.mensagem == 1) {
-          $("#sub-"+id).hide(1000)
+          $("#sub-"+sub.idSub).hide(1000)
         }})
     }
     else 
       return false    
   }
-  public ativarSub(id) {
+  public ativarSub(sub: Sub) {
     let c = confirm("Tem certeza que deseja ativar a sub-equipe?")
     if(c){
-      this.service.ativarSub(id).subscribe(data => {
+      this.service.ativarSub(sub).subscribe(data => {
       this.mensagem = data
       if (this.mensagem == 1) {
-        $("#sub-"+id).hide(1000)
+        $("#sub-"+sub.idSub).hide(1000)
       }
       })
     }

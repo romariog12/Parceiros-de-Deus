@@ -36,12 +36,12 @@
     <td><span class="btn btn-link">{{equipe.lider.nome}}</span></td>
     <td >
       <span *ngIf="acao == 'ativos'">
-        <button (click)="inativarEquipe(equipe.idEquipe)" class="btn btn-outline-warning btn-sm ">Inativar</button>
+        <button (click)="inativarEquipe(equipe)" class="btn btn-outline-warning btn-sm ">Inativar</button>
         <button  routerLink="/editarEquipe/{{equipe.idEquipe}}"class="btn btn-outline-primary btn-sm ">Editar</button>
   
       </span>
       <span *ngIf="acao == 'inativos'">
-          <button (click)="ativarEquipe(equipe.idEquipe)" class="btn btn-outline-success btn-sm ">Ativar</button>
+          <button (click)="ativarEquipe(equipe)" class="btn btn-outline-success btn-sm ">Ativar</button>
           <button  routerLink="/editarEquipe/{{equipe.idEquipe}}"class="btn btn-outline-primary btn-sm ">Editar</button>
           <button (click)="excluirEquipe(equipe.idEquipe)" class="btn btn-outline-danger btn-sm">Excluir definitivamente</button>
       </span>
@@ -97,7 +97,7 @@
         <td>{{subs.nome}}</td>
         <td>{{subs.lider.nome}}</td>
         <td *ngIf="subs.status == 1">
-          <button  class="btn btn-warning btn-sm" (click)="inativarSub(subs.idSub)">Inativar</button>
+          <button  class="btn btn-warning btn-sm" (click)="inativarSub(subs)">Inativar</button>
           <button  class="btn btn-primary btn-sm" routerLink="editarSub/{{getEquipe.idEquipe}}/{{subs.idSub}}">Transferir</button>
         </td>
       </tr>

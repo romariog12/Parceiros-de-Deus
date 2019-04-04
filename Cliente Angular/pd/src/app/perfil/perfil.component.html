@@ -34,7 +34,7 @@
             <td><span class="btn btn-link">{{subs.nome}}</span></td>
             <td><span class="btn btn-link">{{subs.lider.nome}}<span *ngIf="subs.lider.conjugue"> e {{subs.lider.conjugue.nome}}</span></span></td>
             <td >
-              <button  class="btn btn-outline-warning btn-sm"(click)="inativarSub(subs.idSub)">Inativar</button>
+              <button  class="btn btn-outline-warning btn-sm"(click)="inativarSub(subs)">Inativar</button>
               <button  class="btn btn-outline-primary btn-sm" routerLink="/editarSub/{{perfil.equipe.idEquipe}}/{{subs.idSub}}">Editar</button>
             </td>
             
@@ -58,7 +58,7 @@
             <td><span class="btn btn-link">{{subs.nome}}</span></td>
             <td><span class="btn btn-link">{{subs.lider.nome}}<span *ngIf="subs.lider.conjugue"> e {{subs.lider.conjugue.nome}}</span></span></td>
             <td >
-              <button  class="btn btn-success btn-sm"(click)="ativarSub(subs.idSub)">Ativar</button>
+              <button  class="btn btn-success btn-sm"(click)="ativarSub(subs)">Ativar</button>
               <button  class="btn btn-danger btn-sm" (click)="excluirSub(subs.idSub)">Excluir definitivamente</button>
             </td>
           </tr>
